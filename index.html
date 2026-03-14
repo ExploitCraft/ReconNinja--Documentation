@@ -761,13 +761,13 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     </div>
     <div class="term-body">
 <pre><code><span class="cmt"># Standard install</span>
-<span class="cmd">pip install</span> reconninja
+<span class="cmd">pip install</span> ReconNinja
 
 <span class="cmt"># With AI support (Groq, Gemini, OpenAI, Ollama)</span>
-<span class="cmd">pip install</span> <span class="str">"reconninja[ai]"</span>
+<span class="cmd">pip install</span> <span class="str">"ReconNinja[ai]"</span>
 
 <span class="cmt"># Full — includes Shodan + Censys</span>
-<span class="cmd">pip install</span> <span class="str">"reconninja[full]"</span></code></pre>
+<span class="cmd">pip install</span> <span class="str">"ReconNinja[full]"</span></code></pre>
     </div>
   </div>
 
@@ -805,7 +805,7 @@ tr:hover td{background:rgba(255,255,255,0.015)}
       <span class="term-name">bash</span>
     </div>
     <div class="term-body">
-<pre><code><span class="cmd">reconninja --check-tools</span>
+<pre><code><span class="cmd">ReconNinja --check-tools</span>
 
 <span class="cmt"># Optional external tools: nmap, rustscan, masscan, amass,</span>
 <span class="cmt"># subfinder, httpx, feroxbuster, ffuf, dirsearch,</span>
@@ -829,28 +829,28 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     </div>
     <div class="term-body">
 <pre><code><span class="cmt"># Interactive guided setup</span>
-<span class="cmd">reconninja</span>
+<span class="cmd">ReconNinja</span>
 
 <span class="cmt"># Standard scan</span>
-<span class="cmd">reconninja</span> <span class="fl">-t</span> example.com
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com
 
 <span class="cmt"># Full 14-phase pipeline</span>
-<span class="cmd">reconninja</span> <span class="fl">-t</span> example.com <span class="fl">--profile</span> full_suite <span class="fl">-y</span>
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--profile</span> full_suite <span class="fl">-y</span>
 
 <span class="cmt"># Intelligence modules — no keys needed</span>
-<span class="cmd">reconninja</span> <span class="fl">-t</span> example.com <span class="fl">--whois --wayback --ssl -y</span>
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--whois --wayback --ssl -y</span>
 
 <span class="cmt"># v5.1: Censys + Hunter.io email enumeration</span>
-<span class="cmd">reconninja</span> <span class="fl">-t</span> example.com \
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
   <span class="fl">--censys --censys-key</span> YOUR_KEY \
   <span class="fl">--hunter --hunter-key</span> YOUR_KEY <span class="fl">-y</span>
 
 <span class="cmt"># v5.1: Diff current scan against a baseline</span>
-<span class="cmd">reconninja</span> <span class="fl">-t</span> example.com \
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
   <span class="fl">--diff</span> reports/example.com_20260309_120000/state.json <span class="fl">-y</span>
 
 <span class="cmt"># Full intelligence suite</span>
-<span class="cmd">reconninja</span> <span class="fl">-t</span> example.com <span class="fl">--profile</span> full_suite \
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--profile</span> full_suite \
   <span class="fl">--whois --wayback --ssl</span>                     \
   <span class="fl">--shodan --shodan-key</span> YOUR_KEY               \
   <span class="fl">--vt --vt-key</span> YOUR_KEY                       \
@@ -1022,7 +1022,7 @@ tr:hover td{background:rgba(255,255,255,0.015)}
           <li><span class="ic">orchestrator.py</span> — <span class="ic">--exclude</span> flag was parsed but never applied; all phase guards now check <span class="ic">cfg.exclude_phases</span></li>
           <li><span class="ic">orchestrator.py</span> — VirusTotal always called <span class="ic">vt_domain_lookup</span> even on IP targets; now routes via <span class="ic">ipaddress.ip_address()</span></li>
           <li><span class="ic">orchestrator.py</span> — Screenshots phase skipped when no subdomain file existed; now uses <span class="ic">web_findings</span> URLs with main domain as fallback</li>
-          <li><span class="ic">reconninja.py / reports.py / orchestrator.py / resume.py</span> — Version hardcoded as <span class="ic">5.0.0</span> across multiple files; all bumped to <span class="ic">5.2.1</span></li>
+          <li><span class="ic">ReconNinja.py / reports.py / orchestrator.py / resume.py</span> — Version hardcoded as <span class="ic">5.0.0</span> across multiple files; all bumped to <span class="ic">5.2.1</span></li>
           <li><span class="ic">orchestrator.py</span> — Dead imports (<span class="ic">signal</span>, <span class="ic">sys</span>, <span class="ic">asdict</span>) removed</li>
           <li><span class="ic">updater.py</span> — <span class="ic">subprocess.run</span> calls missing <span class="ic">timeout</span> parameter; added <span class="ic">timeout=300</span></li>
           <li><span class="ic">orchestrator.py</span> — Phase 2b Async TCP ran even when <span class="ic">port</span> phase excluded; wrapped in exclude guard</li>
@@ -1128,7 +1128,7 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     </div>
     <div class="term-body">
 <pre><code><span class="cmt"># Scan today and diff against last week's baseline</span>
-<span class="cmd">reconninja</span> <span class="fl">-t</span> example.com \
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
   <span class="fl">--diff</span> reports/example.com_20260309_120000/state.json \
   <span class="fl">-y</span></code></pre>
     </div>
@@ -1170,7 +1170,7 @@ tr:hover td{background:rgba(255,255,255,0.015)}
       <span class="term-name">bash</span>
     </div>
     <div class="term-body">
-<pre><code><span class="cmd">reconninja</span> <span class="fl">-t</span> example.com \
+<pre><code><span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
   <span class="fl">--ai</span>                              \
   <span class="fl">--ai-provider</span> groq               \
   <span class="fl">--ai-key</span> YOUR_GROQ_KEY           \
@@ -1220,7 +1220,7 @@ tr:hover td{background:rgba(255,255,255,0.015)}
     </div>
     <div class="term-body">
 <pre><code><span class="cmt"># Scan crashed after Phase 8 — resume from checkpoint</span>
-<span class="cmd">reconninja</span> <span class="fl">--resume</span> reports/example.com_20260314_090000/state.json</code></pre>
+<span class="cmd">ReconNinja</span> <span class="fl">--resume</span> reports/example.com_20260314_090000/state.json</code></pre>
     </div>
   </div>
   <p>All intelligence results (WHOIS, Wayback, SSL, VirusTotal, Shodan, Censys, Hunter.io) are serialized into <span class="ic">state.json</span> and fully restored on resume.</p>
