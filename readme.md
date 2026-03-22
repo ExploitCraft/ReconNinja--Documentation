@@ -4,7 +4,7 @@ A single-file static documentation page for [ReconNinja](https://github.com/Expl
 
 ## What this is
 
-`reconninja-docs.html` is a self-contained HTML documentation site. No build tools, no dependencies, no npm — just open it in a browser or serve it as a static page.
+`index.html` is a self-contained HTML documentation site. No build tools, no dependencies, no npm — just open it in a browser or serve it as a static page.
 
 ## Deploy
 
