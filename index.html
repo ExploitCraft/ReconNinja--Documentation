@@ -3,436 +3,453 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReconNinja v6.0.0</title>
+<title>HackerInc — ExploitCraft Toolkit Docs</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── TOKENS ───────────────────────────────────────────────────────────────── */
 :root {
-  --bg:       #07090c;
-  --bg2:      #0b0e13;
-  --bg3:      #111620;
-  --border:   rgba(255,255,255,0.06);
-  --border2:  rgba(255,255,255,0.12);
-  --g:        #39ff14;
-  --g2:       #1aff8c;
-  --r:        #ff2952;
-  --b:        #00cfff;
-  --y:        #ffb347;
-  --text:     #b8c4d4;
-  --text2:    #6b7f96;
-  --white:    #eef3fa;
-}
+  --bg:      #07090c;
+  --bg2:     #0b0e13;
+  --bg3:     #111620;
+  --border:  rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --g:   #39ff14;
+  --g2:  #1aff8c;
+  --r:   #ff2952;
+  --b:   #00cfff;
+  --y:   #ffb347;
+  --p:   #b47aff;
+  --pk:  #ff6be8;
+  --text:  #b8c4d4;
+  --text2: #6b7f96;
+  --white: #eef3fa;
 
+  /* per-tool accent colors */
+  --rn-c:  #39ff14;
+  --vh-c:  #b47aff;
+  --el-c:  #ff2952;
+  --gd-c:  #00cfff;
+  --wp-c:  #ffb347;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:15px}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Outfit',sans-serif;
-  line-height:1.7;
-  overflow-x:hidden;
-}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;line-height:1.7;overflow-x:hidden}
 
-/* scanlines */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:999;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);
-  opacity:0.3;
-}
-/* grid */
-body::after{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(57,255,20,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,0.03) 1px,transparent 1px);
-  background-size:60px 60px;
-}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 4px);opacity:.25}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(57,255,20,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,20,.025) 1px,transparent 1px);background-size:60px 60px}
 
+/* ── LAYOUT ──────────────────────────────────────────────────────────────── */
 .layout{display:flex;min-height:100vh;position:relative;z-index:1}
 
 /* ── SIDEBAR ─────────────────────────────────────────────────────────────── */
-.sidebar{
-  width:250px;flex-shrink:0;position:sticky;top:0;height:100vh;
-  overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;padding:0;
-}
+.sidebar{width:260px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column}
 .sidebar::-webkit-scrollbar{width:2px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--g);opacity:0.3}
+.sidebar::-webkit-scrollbar-thumb{background:var(--g);opacity:.3}
 
-.sb-logo{padding:2rem 1.5rem 1.5rem;border-bottom:1px solid var(--border)}
-.sb-logo-word{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;line-height:1;color:var(--white)}
-.sb-logo-word span{color:var(--g)}
-.sb-version{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text2);margin-top:4px;letter-spacing:1px}
-.sb-version b{color:var(--g);font-weight:400}
+.sb-brand{padding:1.75rem 1.5rem 1.25rem;border-bottom:1px solid var(--border)}
+.sb-org{font-family:'Bebas Neue',sans-serif;font-size:.7rem;letter-spacing:5px;color:var(--text2);text-transform:uppercase;margin-bottom:4px}
+.sb-name{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:3px;color:var(--white);line-height:1}
+.sb-name span{color:var(--g)}
+.sb-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text2);letter-spacing:1px;margin-top:6px}
 
-.sb-status{
-  display:flex;align-items:center;gap:8px;padding:1rem 1.5rem;
-  border-bottom:1px solid var(--border);
-  font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text2);
-}
+.sb-status{display:flex;align-items:center;gap:8px;padding:.9rem 1.5rem;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text2)}
 .sb-dot{width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 6px var(--g);animation:blink 2.5s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-.sb-nav{padding:1.5rem 0}
-.sb-group{margin-bottom:0.25rem}
-.sb-group-label{
-  padding:0.5rem 1.5rem 0.25rem;font-family:'JetBrains Mono',monospace;
-  font-size:0.58rem;text-transform:uppercase;letter-spacing:2px;color:var(--text2);opacity:0.6;
-}
-.sb-link{
-  display:flex;align-items:center;gap:0.75rem;padding:0.45rem 1.5rem;
-  color:var(--text2);text-decoration:none;font-size:0.82rem;font-weight:500;
-  transition:all 0.15s;border-left:2px solid transparent;position:relative;
-}
-.sb-link:hover{color:var(--white);border-left-color:var(--border2)}
-.sb-link.active{color:var(--g);border-left-color:var(--g);background:rgba(57,255,20,0.04)}
-.sb-link .num{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--text2);opacity:0.5;min-width:18px}
-.sb-link.active .num{color:var(--g);opacity:0.7}
-.sb-link .new-badge{font-family:'JetBrains Mono',monospace;font-size:0.52rem;color:var(--g);background:rgba(57,255,20,0.1);border:1px solid rgba(57,255,20,0.2);padding:0.05rem 0.35rem;border-radius:2px;margin-left:auto}
+.sb-nav{padding:1rem 0;flex:1}
+.sb-section{margin-bottom:.25rem}
+.sb-section-label{padding:.5rem 1.5rem .2rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;text-transform:uppercase;letter-spacing:3px;color:var(--text2);opacity:.5}
 
-.sb-footer{
-  margin-top:auto;padding:1.5rem;border-top:1px solid var(--border);
-  font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--text2);
-}
-.sb-footer a{color:var(--text2);text-decoration:none;transition:color 0.15s}
+.sb-tool-header{display:flex;align-items:center;gap:.65rem;padding:.5rem 1.5rem .3rem;cursor:pointer;transition:opacity .15s}
+.sb-tool-header:hover{opacity:.8}
+.sb-tool-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sb-tool-name{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:1px}
+.sb-tool-ver{font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--text2);margin-left:auto}
+
+.sb-link{display:flex;align-items:center;gap:.65rem;padding:.35rem 1.5rem .35rem 2.6rem;color:var(--text2);text-decoration:none;font-size:.8rem;font-weight:400;transition:all .15s;border-left:2px solid transparent}
+.sb-link:hover{color:var(--white);background:rgba(255,255,255,.02)}
+.sb-link.active{border-left-color:var(--g);background:rgba(57,255,20,.035);color:var(--g)}
+.sb-link .num{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text2);opacity:.45;min-width:16px}
+
+.sb-footer{padding:1.25rem 1.5rem;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text2)}
+.sb-footer a{color:var(--text2);text-decoration:none;transition:color .15s;display:block;margin-bottom:3px}
 .sb-footer a:hover{color:var(--g)}
 
 /* ── MAIN ────────────────────────────────────────────────────────────────── */
-.main{flex:1;max-width:920px;padding:5rem 4rem;min-width:0}
-
-.section{
-  margin-bottom:7rem;scroll-margin-top:2rem;
-  opacity:0;transform:translateY(20px);transition:opacity 0.5s ease,transform 0.5s ease;
-}
-.section.visible{opacity:1;transform:translateY(0)}
-
-.sec-eyebrow{display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem}
-.sec-num{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--g);letter-spacing:2px}
-.sec-line{height:1px;flex:1;max-width:40px;background:var(--g);opacity:0.4}
-.sec-tag{font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--text2);text-transform:uppercase;letter-spacing:2px}
-
-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3rem);color:var(--white);letter-spacing:2px;line-height:1;margin-bottom:1.5rem}
-h2 .hl{color:var(--g)}
-
-h3{
-  font-size:0.8rem;font-weight:600;color:var(--white);text-transform:uppercase;
-  letter-spacing:2px;margin:2.5rem 0 1rem;display:flex;align-items:center;gap:0.75rem;
-}
-h3::after{content:'';flex:1;height:1px;background:var(--border)}
-h3 .new-tag{font-size:0.6rem;color:var(--g);background:rgba(57,255,20,0.08);border:1px solid rgba(57,255,20,0.2);padding:0.1rem 0.5rem;border-radius:2px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:none}
-
-p{color:var(--text);margin-bottom:1rem;font-size:0.9rem;line-height:1.75}
+.main{flex:1;padding:0;min-width:0}
 
 /* ── HERO ────────────────────────────────────────────────────────────────── */
-#overview{
-  margin-bottom:7rem;padding-bottom:5rem;border-bottom:1px solid var(--border);
-  opacity:0;animation:heroIn 0.8s 0.1s forwards ease;
-}
-@keyframes heroIn{to{opacity:1}}
+.hero{padding:5rem 4.5rem 4rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(57,255,20,.06) 0%,transparent 70%);pointer-events:none}
 
-.hero-tag{
-  display:inline-flex;align-items:center;gap:0.6rem;font-family:'JetBrains Mono',monospace;
-  font-size:0.65rem;color:var(--g);letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;
-}
-.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 8px var(--g);animation:blink 2.5s infinite}
+.hero-eyebrow{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+.hero-eye-dot{width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 8px var(--g);animation:blink 2.5s infinite}
+.hero-eye-text{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--g);letter-spacing:3px;text-transform:uppercase}
 
-.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,10vw,7rem);line-height:0.9;letter-spacing:4px;color:var(--white);margin-bottom:0.5rem}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,8vw,6.5rem);line-height:.9;letter-spacing:4px;color:var(--white);margin-bottom:.75rem}
 .hero-title .slash{color:var(--g)}
-.hero-title .dim{display:block;font-size:clamp(1.2rem,3vw,2rem);letter-spacing:8px;color:var(--text2);opacity:0.5;margin-bottom:0.25rem}
+.hero-title .dim{display:block;font-size:clamp(1rem,2.5vw,1.6rem);letter-spacing:8px;color:var(--text2);opacity:.45;margin-bottom:.15rem}
 
-.hero-sub{font-size:0.95rem;color:var(--text2);max-width:520px;margin:1.5rem 0 2rem;line-height:1.7}
+.hero-desc{font-size:.95rem;color:var(--text2);max-width:580px;margin:1.25rem 0 2rem;line-height:1.75}
 
-.hero-warn{
-  display:flex;align-items:flex-start;gap:1rem;border:1px solid rgba(255,41,82,0.25);
-  background:rgba(255,41,82,0.04);border-radius:4px;padding:1rem 1.25rem;
-  margin-bottom:2.5rem;font-size:0.82rem;color:#ff6b8a;max-width:560px;
-}
-.hero-warn-icon{font-size:0.9rem;flex-shrink:0;margin-top:2px;color:var(--r)}
+.tool-pills{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2rem}
+.tool-pill{display:flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.35rem .9rem;border-radius:3px;border:1px solid;text-decoration:none;transition:all .2s;cursor:pointer}
+.tool-pill:hover{transform:translateY(-1px)}
+.tool-pill.rn{color:var(--rn-c);border-color:rgba(57,255,20,.3);background:rgba(57,255,20,.06)}
+.tool-pill.vh{color:var(--vh-c);border-color:rgba(180,122,255,.3);background:rgba(180,122,255,.06)}
+.tool-pill.el{color:var(--el-c);border-color:rgba(255,41,82,.3);background:rgba(255,41,82,.06)}
+.tool-pill.gd{color:var(--gd-c);border-color:rgba(0,207,255,.3);background:rgba(0,207,255,.06)}
+.tool-pill.wp{color:var(--wp-c);border-color:rgba(255,179,71,.3);background:rgba(255,179,71,.06)}
+.tool-pill .pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
 
-/* v6 new-in banner */
-.new-in-banner{
-  display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;
-  background:rgba(57,255,20,0.04);border:1px solid rgba(57,255,20,0.15);
-  border-radius:6px;padding:0.9rem 1.1rem;margin-bottom:2rem;
-}
-.new-in-label{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--g);letter-spacing:1px;white-space:nowrap}
-.new-in-item{font-family:'JetBrains Mono',monospace;font-size:0.62rem;padding:0.2rem 0.65rem;border-radius:2px;border:1px solid rgba(57,255,20,0.2);color:var(--g2);background:rgba(26,255,140,0.05)}
+.stats-row{display:flex;flex-wrap:wrap;gap:1.5rem}
+.stat{text-align:left}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:2px;color:var(--white);line-height:1}
+.stat-val span{color:var(--g)}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text2);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
 
-.chips{display:flex;flex-wrap:wrap;gap:0.5rem}
-.chip{font-family:'JetBrains Mono',monospace;font-size:0.62rem;padding:0.3rem 0.8rem;border-radius:2px;letter-spacing:0.5px;border:1px solid var(--border2);color:var(--text2)}
-.chip.g{color:var(--g);border-color:rgba(57,255,20,0.25);background:rgba(57,255,20,0.05)}
-.chip.b{color:var(--b);border-color:rgba(0,207,255,0.25);background:rgba(0,207,255,0.05)}
-.chip.r{color:var(--r);border-color:rgba(255,41,82,0.25);background:rgba(255,41,82,0.05)}
-.chip.y{color:var(--y);border-color:rgba(255,179,71,0.25);background:rgba(255,179,71,0.05)}
+/* ── SECTION WRAPPER ─────────────────────────────────────────────────────── */
+.tool-section{padding:4rem 4.5rem;border-bottom:1px solid var(--border);position:relative;scroll-margin-top:1rem;opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+.tool-section.visible{opacity:1;transform:translateY(0)}
+
+.ts-header{display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.ts-icon{font-size:2.5rem;flex-shrink:0;line-height:1}
+.ts-meta{}
+.ts-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:.4rem}
+.ts-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:3px;color:var(--white);line-height:1;margin-bottom:.6rem}
+.ts-desc{font-size:.9rem;color:var(--text2);max-width:620px;line-height:1.7;margin-bottom:1rem}
+.ts-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:.25rem .65rem;border-radius:2px;border:1px solid var(--border2);color:var(--text2)}
+.chip.accent{border-color:currentColor;opacity:.85}
+
+/* sub-headings */
+h3.sh{font-size:.75rem;font-weight:600;color:var(--white);text-transform:uppercase;letter-spacing:2.5px;margin:2.5rem 0 1rem;display:flex;align-items:center;gap:.75rem}
+h3.sh::after{content:'';flex:1;height:1px;background:var(--border)}
+h3.sh .new-tag{font-size:.58rem;font-family:'JetBrains Mono',monospace;padding:.08rem .45rem;border-radius:2px;letter-spacing:1px;text-transform:none}
 
 /* ── TERMINAL ────────────────────────────────────────────────────────────── */
-.terminal{
-  background:#060810;border:1px solid var(--border2);border-radius:8px;
-  overflow:hidden;margin:1.5rem 0;
-  box-shadow:0 4px 30px rgba(0,0,0,0.5),0 0 0 1px rgba(57,255,20,0.04);
-}
-.term-bar{
-  display:flex;align-items:center;gap:0.5rem;padding:0.7rem 1rem;
-  background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border);
-}
-.term-dot{width:10px;height:10px;border-radius:50%}
-.term-dot.r{background:#ff5f56}.term-dot.y{background:#ffbd2e}.term-dot.g{background:#27c93f}
-.term-name{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--text2);margin-left:0.25rem;letter-spacing:1px}
-.term-body{padding:1.5rem;overflow-x:auto}
+.terminal{background:#060810;border:1px solid var(--border2);border-radius:8px;overflow:hidden;margin:1.25rem 0;box-shadow:0 4px 24px rgba(0,0,0,.45)}
+.term-bar{display:flex;align-items:center;gap:.5rem;padding:.65rem 1rem;background:rgba(255,255,255,.025);border-bottom:1px solid var(--border)}
+.td{width:10px;height:10px;border-radius:50%}
+.td.r{background:#ff5f56}.td.y{background:#ffbd2e}.td.g{background:#27c93f}
+.term-name{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text2);margin-left:.25rem;letter-spacing:1px}
+.term-body{padding:1.25rem 1.5rem;overflow-x:auto}
 .term-body::-webkit-scrollbar{height:3px}
-.term-body::-webkit-scrollbar-thumb{background:rgba(57,255,20,0.3)}
+.term-body::-webkit-scrollbar-thumb{background:rgba(57,255,20,.3)}
 pre{margin:0;background:none;border:none;padding:0}
-code{font-family:'JetBrains Mono',monospace;font-size:0.8rem;line-height:1.9;color:#8baacc}
+code{font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.9;color:#8baacc}
 .cmt{color:#2d4a2d}.cmd{color:var(--g)}.fl{color:#ffb347}.str{color:#ff8888}.kw{color:var(--b)}
 
-.ic{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--g2);background:rgba(57,255,20,0.07);border:1px solid rgba(57,255,20,0.15);padding:0.1rem 0.45rem;border-radius:3px}
+/* ── FEATURE GRID ────────────────────────────────────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.85rem;margin:1.25rem 0}
+.feat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.1rem;transition:all .2s;position:relative;overflow:hidden}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,currentColor,transparent);opacity:0;transition:opacity .3s}
+.feat:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.12)}
+.feat:hover::before{opacity:.5}
+.feat-icon{font-size:1.3rem;margin-bottom:.6rem;display:block}
+.feat-title{font-weight:600;color:var(--white);font-size:.85rem;margin-bottom:.35rem}
+.feat-desc{font-size:.75rem;color:var(--text2);line-height:1.55}
 
 /* ── TABLE ───────────────────────────────────────────────────────────────── */
-.tbl-wrap{overflow-x:auto;margin:1.5rem 0}
-table{width:100%;border-collapse:collapse;font-size:0.83rem}
-thead{border-bottom:1px solid rgba(57,255,20,0.2)}
-th{font-family:'JetBrains Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:2px;color:var(--g);padding:0.75rem 1rem;text-align:left;font-weight:400}
-td{padding:0.7rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
-td:first-child{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--b)}
+.tbl{overflow-x:auto;margin:1.25rem 0}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead{border-bottom:1px solid rgba(57,255,20,.2)}
+th{font-family:'JetBrains Mono',monospace;font-size:.56rem;text-transform:uppercase;letter-spacing:2px;color:var(--g);padding:.7rem 1rem;text-align:left;font-weight:400}
+td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+td:first-child{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--b)}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,0.015)}
-.td-new{color:var(--g)!important;font-size:0.62rem!important;font-family:'JetBrains Mono',monospace!important}
+tr:hover td{background:rgba(255,255,255,.012)}
+
+/* ── INSTALL BLOCK ───────────────────────────────────────────────────────── */
+.install-row{display:flex;flex-wrap:wrap;gap:.75rem;margin:1.25rem 0}
+.install-card{flex:1;min-width:220px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.25rem}
+.install-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:2px;color:var(--text2);margin-bottom:.65rem}
+.install-cmd{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--g)}
 
 /* ── PIPELINE ────────────────────────────────────────────────────────────── */
-.pipeline{margin:2rem 0;position:relative;padding-left:2.5rem}
-.pipeline::before{content:'';position:absolute;left:0.75rem;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--g),transparent);opacity:0.3}
-.phase{
-  position:relative;padding:1.1rem 1.25rem;background:var(--bg2);border:1px solid var(--border);
-  border-radius:6px;margin-bottom:4px;transition:all 0.2s;display:flex;gap:1rem;align-items:flex-start;
-}
-.phase::before{content:'';position:absolute;left:-1.75rem;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;border:1px solid var(--g);background:var(--bg);box-shadow:0 0 8px rgba(57,255,20,0.3)}
-.phase.new-phase{border-color:rgba(57,255,20,0.2);background:rgba(57,255,20,0.025)}
-.phase.new-phase::before{background:rgba(57,255,20,0.3);box-shadow:0 0 12px rgba(57,255,20,0.5)}
-.phase:hover{border-color:rgba(57,255,20,0.2);background:rgba(57,255,20,0.03);transform:translateX(3px)}
-.phase-badge{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--g);border:1px solid rgba(57,255,20,0.25);background:rgba(57,255,20,0.06);padding:0.2rem 0.55rem;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:2px}
-.phase-badge.new{color:var(--g2);border-color:rgba(26,255,140,0.35);background:rgba(26,255,140,0.08)}
-.phase-name{font-weight:600;color:var(--white);font-size:0.88rem}
-.phase-desc{font-size:0.78rem;color:var(--text2);margin-top:2px}
+.pipeline{margin:1.5rem 0;position:relative;padding-left:2.25rem}
+.pipeline::before{content:'';position:absolute;left:.7rem;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--g),transparent);opacity:.25}
+.phase{position:relative;padding:.9rem 1.1rem;background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;transition:all .2s;display:flex;gap:.85rem;align-items:flex-start}
+.phase::before{content:'';position:absolute;left:-1.55rem;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;border:1px solid var(--g);background:var(--bg);box-shadow:0 0 6px rgba(57,255,20,.25)}
+.phase:hover{border-color:rgba(57,255,20,.2);transform:translateX(3px)}
+.phase.new-p{border-color:rgba(57,255,20,.18);background:rgba(57,255,20,.02)}
+.phase.new-p::before{background:rgba(57,255,20,.3)}
+.pbadge{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--g);border:1px solid rgba(57,255,20,.25);background:rgba(57,255,20,.06);padding:.18rem .5rem;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:3px}
+.pbadge.new{color:var(--g2);border-color:rgba(26,255,140,.3);background:rgba(26,255,140,.07)}
+.pname{font-weight:600;color:var(--white);font-size:.86rem}
+.pdesc{font-size:.76rem;color:var(--text2);margin-top:1px}
 
-/* ── CARDS ───────────────────────────────────────────────────────────────── */
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.5rem 0}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.5rem 1.25rem;transition:all 0.2s;position:relative;overflow:hidden}
-.card.new-card{border-color:rgba(57,255,20,0.18)}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent);opacity:0;transition:opacity 0.3s}
-.card:hover{border-color:rgba(57,255,20,0.2);box-shadow:0 0 20px rgba(57,255,20,0.04);transform:translateY(-2px)}
-.card:hover::before{opacity:0.6}
-.card-icon{font-size:1.4rem;margin-bottom:0.75rem;display:block}
-.card-title{font-weight:600;color:var(--white);font-size:0.88rem;margin-bottom:0.4rem}
-.card-desc{font-size:0.77rem;color:var(--text2);line-height:1.55}
-.card-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--g2);border:1px solid rgba(26,255,140,0.2);background:rgba(26,255,140,0.05);padding:0.15rem 0.55rem;border-radius:2px;margin-top:0.75rem;letter-spacing:0.5px}
-.card-pill.blue{color:var(--b);border-color:rgba(0,207,255,0.2);background:rgba(0,207,255,0.05)}
-.card-pill.new{color:var(--g);border-color:rgba(57,255,20,0.3);background:rgba(57,255,20,0.07)}
-
-/* ── CHANGELOG ───────────────────────────────────────────────────────────── */
-.cl{display:flex;flex-direction:column;gap:0;margin:2rem 0}
-.cl-row{display:flex;gap:2rem;padding-bottom:2.5rem;position:relative}
-.cl-row:not(:last-child)::before{content:'';position:absolute;left:42px;top:32px;bottom:0;width:1px;background:linear-gradient(to bottom,rgba(57,255,20,0.3),transparent)}
-.cl-tag{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--g);background:rgba(57,255,20,0.07);border:1px solid rgba(57,255,20,0.2);padding:0.3rem 0.6rem 0.2rem;border-radius:4px;width:86px;text-align:center;flex-shrink:0;height:fit-content;margin-top:2px}
-.cl-tag.bugfix{color:var(--r);background:rgba(255,41,82,0.06);border-color:rgba(255,41,82,0.2)}
-.cl-tag.feat{color:var(--b);background:rgba(0,207,255,0.06);border-color:rgba(0,207,255,0.2)}
-.cl-tag.major{color:var(--g);background:rgba(57,255,20,0.1);border-color:rgba(57,255,20,0.35);box-shadow:0 0 12px rgba(57,255,20,0.1)}
-.cl-body{flex:1}
-.cl-meta{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--text2);letter-spacing:1px;margin-bottom:0.5rem}
-.cl-title{font-weight:600;color:var(--white);font-size:0.95rem;margin-bottom:0.75rem}
-.cl-items{list-style:none;padding:0;display:flex;flex-direction:column;gap:0.35rem}
-.cl-items li{font-size:0.8rem;color:var(--text);padding-left:1.25rem;position:relative;line-height:1.6}
-.cl-items li::before{content:'▸';position:absolute;left:0;color:var(--g);font-size:0.7rem}
-.cl-section{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin:1rem 0 0.4rem;padding-left:0}
-
-/* ── DIFF PANEL ──────────────────────────────────────────────────────────── */
-.diff-demo{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1.5rem 0}
-.diff-header{display:flex;align-items:center;gap:1rem;padding:0.75rem 1.25rem;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text2)}
-.diff-header span{color:var(--g)}
-.diff-row{display:flex;gap:0;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:0.75rem}
-.diff-row:last-child{border-bottom:none}
-.diff-type{width:100px;flex-shrink:0;padding:0.6rem 1rem;font-size:0.6rem;letter-spacing:1px}
-.diff-type.new{color:var(--g);background:rgba(57,255,20,0.05)}
-.diff-type.gone{color:var(--r);background:rgba(255,41,82,0.05)}
-.diff-type.changed{color:var(--b);background:rgba(0,207,255,0.05)}
-.diff-val{padding:0.6rem 1rem;color:var(--text);flex:1}
-
-/* ── FLAG BLOCKS ─────────────────────────────────────────────────────────── */
+/* ── FLAG BLOCK ──────────────────────────────────────────────────────────── */
 .flag-block{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1rem 0}
-.flag-row{display:grid;grid-template-columns:230px 1fr;gap:0;padding:0.6rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.03);align-items:start;transition:background 0.15s}
+.flag-row{display:grid;grid-template-columns:220px 1fr;padding:.55rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.03);align-items:start;transition:background .15s}
 .flag-row:last-child{border-bottom:none}
-.flag-row:hover{background:rgba(255,255,255,0.02)}
-.flag-name{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--y);padding:0.1rem 0}
-.flag-name.new-flag{color:var(--g2)}
-.flag-desc{font-size:0.8rem;color:var(--text2);padding:0.1rem 0}
+.flag-row:hover{background:rgba(255,255,255,.018)}
+.flag-name{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--y);padding:.1rem 0}
+.flag-name.new{color:var(--g2)}
+.flag-desc{font-size:.78rem;color:var(--text2);padding:.1rem 0}
 
-/* ── BUG TABLE ───────────────────────────────────────────────────────────── */
-.bug-table{width:100%;border-collapse:collapse;font-size:0.8rem;margin:1.5rem 0}
-.bug-table th{font-family:'JetBrains Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:2px;color:var(--g);padding:0.6rem 0.9rem;text-align:left;font-weight:400;border-bottom:1px solid rgba(57,255,20,0.2)}
-.bug-table td{padding:0.65rem 0.9rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
-.bug-table tr:last-child td{border-bottom:none}
-.bug-table tr:hover td{background:rgba(255,255,255,0.015)}
-.sev{font-family:'JetBrains Mono',monospace;font-size:0.62rem;padding:0.15rem 0.55rem;border-radius:3px;white-space:nowrap}
-.sev.crit{color:var(--r);background:rgba(255,41,82,0.1);border:1px solid rgba(255,41,82,0.2)}
-.sev.high{color:var(--y);background:rgba(255,179,71,0.1);border:1px solid rgba(255,179,71,0.2)}
-.sev.med{color:var(--b);background:rgba(0,207,255,0.08);border:1px solid rgba(0,207,255,0.2)}
-.sev.low{color:var(--text2);background:rgba(255,255,255,0.04);border:1px solid var(--border)}
+/* ── PATTERN TABLE ───────────────────────────────────────────────────────── */
+.pat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.6rem;margin:1.25rem 0}
+.pat{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:.85rem 1rem;display:flex;align-items:flex-start;gap:.75rem}
+.pat-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.pat-cat{font-weight:600;color:var(--white);font-size:.83rem;margin-bottom:.25rem}
+.pat-items{font-size:.74rem;color:var(--text2);line-height:1.6}
 
-/* ── OUTPUT TREE ─────────────────────────────────────────────────────────── */
-.tree{font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:2;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0}
-.tree .dir{color:var(--white);font-weight:500}
-.tree .file-g{color:var(--g2)}
-.tree .file-new{color:var(--g);font-weight:500}
-.tree .cmt{color:var(--text2);opacity:0.5;font-size:0.7rem}
+/* ── ECOSYSTEM ───────────────────────────────────────────────────────────── */
+.eco-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.85rem;margin:1.5rem 0}
+.eco-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.35rem 1.25rem;text-decoration:none;transition:all .2s;display:block;position:relative;overflow:hidden}
+.eco-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:currentColor;opacity:0;transition:opacity .25s}
+.eco-card:hover{transform:translateY(-2px)}
+.eco-card:hover::before{opacity:1}
+.eco-card.rn{color:var(--rn-c)}.eco-card.vh{color:var(--vh-c)}.eco-card.el{color:var(--el-c)}.eco-card.gd{color:var(--gd-c)}.eco-card.wp{color:var(--wp-c)}
+.eco-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.eco-title{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:500}
+.eco-ver{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text2)}
+.eco-desc{font-size:.78rem;color:var(--text2);line-height:1.55;margin-bottom:.75rem}
+.eco-tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.eco-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:.15rem .5rem;border-radius:2px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text2)}
 
-.divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:4rem 0}
+/* ── IC inline code ──────────────────────────────────────────────────────── */
+.ic{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--g2);background:rgba(57,255,20,.07);border:1px solid rgba(57,255,20,.15);padding:.08rem .4rem;border-radius:3px}
 
-.footer{padding-top:2rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text2)}
-.footer a{color:var(--text2);text-decoration:none;transition:color 0.15s}
-.footer a:hover{color:var(--g)}
+/* ── BADGE ───────────────────────────────────────────────────────────────── */
+.badge{font-family:'JetBrains Mono',monospace;font-size:.58rem;padding:.15rem .55rem;border-radius:3px;border:1px solid}
+.badge.new{color:var(--g);border-color:rgba(57,255,20,.3);background:rgba(57,255,20,.07)}
+.badge.crit{color:var(--r);border-color:rgba(255,41,82,.3);background:rgba(255,41,82,.07)}
+.badge.high{color:var(--y);border-color:rgba(255,179,71,.3);background:rgba(255,179,71,.07)}
+
+/* ── TOOL COLOR OVERRIDES ────────────────────────────────────────────────── */
+.t-rn{--tc:var(--rn-c)}.t-vh{--tc:var(--vh-c)}.t-el{--tc:var(--el-c)}.t-gd{--tc:var(--gd-c)}.t-wp{--tc:var(--wp-c)}
+.ts-eyebrow,.t-rn .ts-title .hl,.t-vh .ts-title .hl,.t-el .ts-title .hl,.t-gd .ts-title .hl,.t-wp .ts-title .hl{color:var(--tc)}
+.t-rn .ts-eyebrow{color:var(--rn-c)}.t-vh .ts-eyebrow{color:var(--vh-c)}.t-el .ts-eyebrow{color:var(--el-c)}.t-gd .ts-eyebrow{color:var(--gd-c)}.t-wp .ts-eyebrow{color:var(--wp-c)}
+
+/* ── WARN ────────────────────────────────────────────────────────────────── */
+.warn{display:flex;align-items:flex-start;gap:.9rem;border:1px solid rgba(255,41,82,.2);background:rgba(255,41,82,.03);border-radius:4px;padding:.9rem 1.1rem;margin-bottom:1.5rem;font-size:.8rem;color:#ff6b8a;max-width:600px}
+.warn-icon{flex-shrink:0;color:var(--r);margin-top:1px}
+
+/* ── FOOTER ──────────────────────────────────────────────────────────────── */
+.footer{padding:2.5rem 4.5rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text2);border-top:1px solid var(--border)}
+.footer a{color:var(--text2);text-decoration:none;transition:color .15s}.footer a:hover{color:var(--g)}
 .footer-links{display:flex;gap:1.5rem}
 
-@media(max-width:768px){
-  .sidebar{display:none}
-  .main{padding:2.5rem 1.25rem}
-  .hero-title{font-size:clamp(3rem,12vw,5rem)}
-  .flag-row{grid-template-columns:1fr;gap:0.25rem}
-}
+/* ── DIFF ─────────────────────────────────────────────────────────────────── */
+.diff-demo{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1.25rem 0}
+.diff-head{display:flex;align-items:center;gap:1rem;padding:.65rem 1.2rem;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text2)}
+.diff-row{display:flex;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.73rem}
+.diff-row:last-child{border-bottom:none}
+.diff-type{width:90px;flex-shrink:0;padding:.55rem .9rem;font-size:.58rem;letter-spacing:.5px}
+.diff-type.add{color:var(--g);background:rgba(57,255,20,.05)}.diff-type.rm{color:var(--r);background:rgba(255,41,82,.05)}.diff-type.ch{color:var(--b);background:rgba(0,207,255,.05)}
+.diff-val{padding:.55rem .9rem;color:var(--text);flex:1}
+
+/* ── SEVERITY ─────────────────────────────────────────────────────────────── */
+.sev{font-family:'JetBrains Mono',monospace;font-size:.6rem;padding:.13rem .5rem;border-radius:3px;border:1px solid;white-space:nowrap}
+.sev.crit{color:var(--r);background:rgba(255,41,82,.08);border-color:rgba(255,41,82,.2)}
+.sev.high{color:var(--y);background:rgba(255,179,71,.08);border-color:rgba(255,179,71,.2)}
+.sev.med{color:var(--b);background:rgba(0,207,255,.06);border-color:rgba(0,207,255,.18)}
+.sev.low{color:var(--text2);background:rgba(255,255,255,.03);border-color:var(--border)}
+
+@media(max-width:900px){.sidebar{display:none}.tool-section,.hero{padding:2.5rem 1.5rem}.footer{padding:2rem 1.5rem}.flag-row{grid-template-columns:1fr;gap:.2rem}}
 </style>
 </head>
 <body>
 <div class="layout">
 
-<!-- ═══ SIDEBAR ════════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════ SIDEBAR ══════════════════════════════════════════ -->
 <aside class="sidebar">
-  <div class="sb-logo">
-    <div class="sb-logo-word">Recon<span>Ninja</span></div>
-    <div class="sb-version"><b>v6.0.0</b> &nbsp;·&nbsp; MIT License</div>
+  <div class="sb-brand">
+    <div class="sb-org">// ExploitCraft</div>
+    <div class="sb-name">Hacker<span>Inc</span></div>
+    <div class="sb-sub">Toolkit Docs &nbsp;·&nbsp; 5 Tools</div>
   </div>
   <div class="sb-status">
     <div class="sb-dot"></div>
-    <span>598 tests passing</span>
+    <span>All tools active</span>
   </div>
   <nav class="sb-nav">
-    <div class="sb-group">
-      <div class="sb-group-label">Getting Started</div>
-      <a href="#overview" class="sb-link active"><span class="num">01</span>Overview</a>
-      <a href="#install" class="sb-link"><span class="num">02</span>Installation</a>
-      <a href="#quickstart" class="sb-link"><span class="num">03</span>Quick Start</a>
+
+    <div class="sb-section">
+      <div class="sb-section-label">Overview</div>
+      <a href="#home" class="sb-link active"><span class="num">00</span>Ecosystem</a>
     </div>
-    <div class="sb-group">
-      <div class="sb-group-label">Core</div>
-      <a href="#pipeline" class="sb-link"><span class="num">04</span>Pipeline</a>
-      <a href="#profiles" class="sb-link"><span class="num">05</span>Scan Profiles</a>
-      <a href="#flags" class="sb-link"><span class="num">06</span>All Flags</a>
+
+    <div class="sb-section">
+      <div class="sb-tool-header">
+        <div class="sb-tool-dot" style="background:var(--rn-c);box-shadow:0 0 5px var(--rn-c)"></div>
+        <span class="sb-tool-name" style="color:var(--rn-c)">ReconNinja</span>
+        <span class="sb-tool-ver">v6.0.0</span>
+      </div>
+      <a href="#rn-overview"   class="sb-link"><span class="num">01</span>Overview</a>
+      <a href="#rn-install"    class="sb-link"><span class="num">02</span>Installation</a>
+      <a href="#rn-quickstart" class="sb-link"><span class="num">03</span>Quick Start</a>
+      <a href="#rn-pipeline"   class="sb-link"><span class="num">04</span>21-Phase Pipeline</a>
+      <a href="#rn-flags"      class="sb-link"><span class="num">05</span>All Flags</a>
+      <a href="#rn-ai"         class="sb-link"><span class="num">06</span>AI Analysis</a>
     </div>
-    <div class="sb-group">
-      <div class="sb-group-label">v6 Features</div>
-      <a href="#changelog" class="sb-link"><span class="num">07</span>Changelog</a>
-      <a href="#bugfixes" class="sb-link"><span class="num">08</span>Bug Fixes <span class="new-badge">v6</span></a>
-      <a href="#newmodules" class="sb-link"><span class="num">09</span>New Modules <span class="new-badge">v6</span></a>
+
+    <div class="sb-section">
+      <div class="sb-tool-header">
+        <div class="sb-tool-dot" style="background:var(--vh-c);box-shadow:0 0 5px var(--vh-c)"></div>
+        <span class="sb-tool-name" style="color:var(--vh-c)">VaultHound</span>
+        <span class="sb-tool-ver">v1.0.0</span>
+      </div>
+      <a href="#vh-overview" class="sb-link"><span class="num">01</span>Overview</a>
+      <a href="#vh-usage"    class="sb-link"><span class="num">02</span>Usage</a>
+      <a href="#vh-patterns" class="sb-link"><span class="num">03</span>43 Patterns</a>
+      <a href="#vh-output"   class="sb-link"><span class="num">04</span>Output</a>
     </div>
-    <div class="sb-group">
-      <div class="sb-group-label">Intelligence</div>
-      <a href="#intelligence" class="sb-link"><span class="num">10</span>All Modules</a>
-      <a href="#ai" class="sb-link"><span class="num">11</span>AI Analysis</a>
-      <a href="#diff" class="sb-link"><span class="num">12</span>Scan Diff</a>
-      <a href="#notify" class="sb-link"><span class="num">13</span>Notifications <span class="new-badge">v6</span></a>
+
+    <div class="sb-section">
+      <div class="sb-tool-header">
+        <div class="sb-tool-dot" style="background:var(--el-c);box-shadow:0 0 5px var(--el-c)"></div>
+        <span class="sb-tool-name" style="color:var(--el-c)">envleaks</span>
+        <span class="sb-tool-ver">v1.0.0</span>
+      </div>
+      <a href="#el-overview" class="sb-link"><span class="num">01</span>Overview</a>
+      <a href="#el-usage"    class="sb-link"><span class="num">02</span>Usage</a>
+      <a href="#el-rules"    class="sb-link"><span class="num">03</span>Detection Rules</a>
+      <a href="#el-ci"       class="sb-link"><span class="num">04</span>CI/CD Integration</a>
     </div>
-    <div class="sb-group">
-      <div class="sb-group-label">Advanced</div>
-      <a href="#output" class="sb-link"><span class="num">14</span>Output & Reports</a>
-      <a href="#resume" class="sb-link"><span class="num">15</span>Resume Scans</a>
-      <a href="#plugins" class="sb-link"><span class="num">16</span>Plugin System</a>
-      <a href="#development" class="sb-link"><span class="num">17</span>Development</a>
+
+    <div class="sb-section">
+      <div class="sb-tool-header">
+        <div class="sb-tool-dot" style="background:var(--gd-c);box-shadow:0 0 5px var(--gd-c)"></div>
+        <span class="sb-tool-name" style="color:var(--gd-c)">gitdork</span>
+        <span class="sb-tool-ver">v1.0.0</span>
+      </div>
+      <a href="#gd-overview"   class="sb-link"><span class="num">01</span>Overview</a>
+      <a href="#gd-usage"      class="sb-link"><span class="num">02</span>Usage</a>
+      <a href="#gd-categories" class="sb-link"><span class="num">03</span>Categories</a>
+      <a href="#gd-engines"    class="sb-link"><span class="num">04</span>Engines</a>
     </div>
+
+    <div class="sb-section">
+      <div class="sb-tool-header">
+        <div class="sb-tool-dot" style="background:var(--wp-c);box-shadow:0 0 5px var(--wp-c)"></div>
+        <span class="sb-tool-name" style="color:var(--wp-c)">wifi-passview</span>
+        <span class="sb-tool-ver">v1.0.0</span>
+      </div>
+      <a href="#wp-overview" class="sb-link"><span class="num">01</span>Overview</a>
+      <a href="#wp-usage"    class="sb-link"><span class="num">02</span>Usage</a>
+      <a href="#wp-platform" class="sb-link"><span class="num">03</span>Platform Notes</a>
+    </div>
+
   </nav>
   <div class="sb-footer">
-    <a href="https://github.com/ExploitCraft/ReconNinja">github.com/ExploitCraft</a><br>
+    <a href="https://github.com/ExploitCraft">github.com/ExploitCraft</a>
     <a href="https://pypi.org/user/ExploitCraft/">pypi.org/user/ExploitCraft</a>
+    <div style="margin-top:8px;opacity:.4">HackerInc · Bangladesh 🇧🇩</div>
   </div>
 </aside>
 
-<!-- ═══ MAIN ════════════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════ MAIN ══════════════════════════════════════════════ -->
 <main class="main">
 
-<!-- HERO -->
-<div id="overview">
-  <div class="hero-tag">v6.0.0 · Latest Release</div>
+<!-- ══ HERO ══════════════════════════════════════════════════════════════════ -->
+<div id="home" class="hero">
+  <div class="hero-eyebrow">
+    <div class="hero-eye-dot"></div>
+    <span class="hero-eye-text">ExploitCraft · Open-Source Security Tooling</span>
+  </div>
   <div class="hero-title">
-    <span class="dim">// recon</span>
-    NINJA<span class="slash">_</span>
+    <span class="dim">// toolkit</span>
+    HACKER<span class="slash">INC</span>_
   </div>
-  <p class="hero-sub">21-phase automated reconnaissance framework for authorized security testing. One command drives the full pipeline — passive recon through cloud bucket enumeration and AI threat analysis.</p>
-  <div class="hero-warn">
-    <span class="hero-warn-icon">⚠</span>
-    <span>Use only against targets you own or have explicit written permission to test. Unauthorized scanning is illegal.</span>
+  <p class="hero-desc">Open-source CLI toolkit for pentesters, bug bounty hunters, and developers who think offensively. Five tools — one ecosystem — covering the full recon-to-exploit surface.</p>
+
+  <div class="tool-pills">
+    <a href="#rn-overview" class="tool-pill rn"><span class="pill-dot"></span>ReconNinja v6</a>
+    <a href="#vh-overview" class="tool-pill vh"><span class="pill-dot"></span>VaultHound v1</a>
+    <a href="#el-overview" class="tool-pill el"><span class="pill-dot"></span>envleaks v1</a>
+    <a href="#gd-overview" class="tool-pill gd"><span class="pill-dot"></span>gitdork v1</a>
+    <a href="#wp-overview" class="tool-pill wp"><span class="pill-dot"></span>wifi-passview v1</a>
   </div>
-  <div class="new-in-banner">
-    <span class="new-in-label">NEW IN V6 →</span>
-    <span class="new-in-item">GitHub OSINT</span>
-    <span class="new-in-item">JS Extraction</span>
-    <span class="new-in-item">Cloud Buckets</span>
-    <span class="new-in-item">DNS Zone Transfer</span>
-    <span class="new-in-item">WAF Detection</span>
-    <span class="new-in-item">CORS Scanner</span>
-    <span class="new-in-item">Scan Diff</span>
-    <span class="new-in-item">Notifications</span>
-    <span class="new-in-item">8 Bugs Fixed</span>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val">5<span>_</span></div><div class="stat-label">Tools</div></div>
+    <div class="stat"><div class="stat-val">21<span>+</span></div><div class="stat-label">Recon Phases</div></div>
+    <div class="stat"><div class="stat-val">100<span>+</span></div><div class="stat-label">Secret Patterns</div></div>
+    <div class="stat"><div class="stat-val">598<span>+</span></div><div class="stat-label">Tests</div></div>
+    <div class="stat"><div class="stat-val">3<span>_</span></div><div class="stat-label">Platforms</div></div>
   </div>
-  <div class="chips">
-    <span class="chip b">Python 3.10+</span>
-    <span class="chip g">598 Tests</span>
-    <span class="chip g">MIT License</span>
-    <span class="chip r">Security Tool</span>
-    <span class="chip y">21 Phases</span>
-    <span class="chip">Linux</span>
-    <span class="chip">PyPI</span>
+
+  <div style="margin-top:2.5rem">
+    <h3 class="sh">Ecosystem Map</h3>
+    <div class="eco-grid">
+      <a href="#rn-overview" class="eco-card rn">
+        <div class="eco-top"><span class="eco-title">🥷 ReconNinja</span><span class="eco-ver">v6.0.0</span></div>
+        <div class="eco-desc">21-phase automated recon framework. Subdomain enum → port scan → web discovery → CVE lookup → AI threat analysis.</div>
+        <div class="eco-tags"><span class="eco-tag">Python</span><span class="eco-tag">598 tests</span><span class="eco-tag">PyPI</span><span class="eco-tag">21 phases</span></div>
+      </a>
+      <a href="#vh-overview" class="eco-card vh">
+        <div class="eco-top"><span class="eco-title">🐾 VaultHound</span><span class="eco-ver">v1.0.0</span></div>
+        <div class="eco-desc">Secret & credential scanner. URL mode, directory mode, git history mode. 43 patterns with entropy filtering.</div>
+        <div class="eco-tags"><span class="eco-tag">Python</span><span class="eco-tag">43 patterns</span><span class="eco-tag">PyPI</span></div>
+      </a>
+      <a href="#el-overview" class="eco-card el">
+        <div class="eco-top"><span class="eco-title">🔐 envleaks</span><span class="eco-ver">v1.0.0</span></div>
+        <div class="eco-desc">Codebase, git history, and Docker image secret scanner with SARIF output and CI/CD pipeline mode.</div>
+        <div class="eco-tags"><span class="eco-tag">Python</span><span class="eco-tag">60+ patterns</span><span class="eco-tag">SARIF</span><span class="eco-tag">PyPI</span></div>
+      </a>
+      <a href="#gd-overview" class="eco-card gd">
+        <div class="eco-top"><span class="eco-title">🎯 gitdork</span><span class="eco-ver">v1.0.0</span></div>
+        <div class="eco-desc">Google, Shodan, and GitHub dork generator. Feed it a target domain or repo — get 100+ ready-to-use queries.</div>
+        <div class="eco-tags"><span class="eco-tag">Python</span><span class="eco-tag">3 engines</span><span class="eco-tag">PyPI</span></div>
+      </a>
+      <a href="#wp-overview" class="eco-card wp">
+        <div class="eco-top"><span class="eco-title">📡 wifi-passview</span><span class="eco-ver">v1.0.0</span></div>
+        <div class="eco-desc">Cross-platform CLI to dump saved WiFi credentials in one command. Linux, Windows, macOS.</div>
+        <div class="eco-tags"><span class="eco-tag">Python</span><span class="eco-tag">3 platforms</span><span class="eco-tag">PyPI</span></div>
+      </a>
+    </div>
   </div>
 </div>
 
-<!-- 02 INSTALL -->
-<section class="section" id="install">
-  <div class="sec-eyebrow"><span class="sec-num">02</span><div class="sec-line"></div><span class="sec-tag">Installation</span></div>
-  <h2>Get <span class="hl">Running</span></h2>
-  <p>Only <span class="ic">rich</span> is a hard dependency. All external tools are optional — ReconNinja detects availability and falls back gracefully. Add <span class="ic">[dns]</span> for zone transfer support.</p>
 
-  <h3>From PyPI</h3>
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- ░░░  RECONNINJA  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+
+<section id="rn-overview" class="tool-section t-rn">
+  <div class="ts-header">
+    <div class="ts-icon">🥷</div>
+    <div class="ts-meta">
+      <div class="ts-eyebrow">// 01 · ReconNinja</div>
+      <div class="ts-title">RECON<span class="hl">NINJA</span></div>
+      <p class="ts-desc">21-phase automated reconnaissance framework for authorized security testing. One command drives the full pipeline — passive recon through cloud bucket enumeration and AI threat analysis.</p>
+      <div class="ts-chips">
+        <span class="chip" style="color:var(--rn-c);border-color:rgba(57,255,20,.25)">v6.0.0</span>
+        <span class="chip">Python 3.10+</span><span class="chip">598 Tests</span><span class="chip">MIT</span><span class="chip">PyPI</span>
+      </div>
+    </div>
+  </div>
+  <div class="warn"><span class="warn-icon">⚠</span><span>Authorized use only. Only scan targets you own or have explicit written permission to test. Unauthorized scanning is illegal.</span></div>
+</section>
+
+<section id="rn-install" class="tool-section t-rn">
+  <h3 class="sh" style="--tc:var(--rn-c)">Installation</h3>
   <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">bash</span></div>
     <div class="term-body"><pre><code><span class="cmt"># Standard</span>
 <span class="cmd">pip install</span> ReconNinja
 
 <span class="cmt"># With AI providers (Groq, Gemini, OpenAI)</span>
 <span class="cmd">pip install</span> <span class="str">"ReconNinja[ai]"</span>
 
-<span class="cmt"># With DNS zone transfer support (dnspython)</span>
+<span class="cmt"># With DNS zone transfer support</span>
 <span class="cmd">pip install</span> <span class="str">"ReconNinja[dns]"</span>
 
 <span class="cmt"># Full — AI + Shodan + dnspython</span>
-<span class="cmd">pip install</span> <span class="str">"ReconNinja[full]"</span></code></pre></div>
-  </div>
+<span class="cmd">pip install</span> <span class="str">"ReconNinja[full]"</span>
 
-  <h3>From Source</h3>
-  <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
-    <div class="term-body"><pre><code><span class="cmd">git clone</span> https://github.com/ExploitCraft/ReconNinja.git
+<span class="cmt"># From source</span>
+<span class="cmd">git clone</span> https://github.com/ExploitCraft/ReconNinja.git
 <span class="cmd">cd</span> ReconNinja &amp;&amp; <span class="cmd">pip install -e</span> <span class="str">".[full]"</span></code></pre></div>
-  </div>
-
-  <h3>Check Tool Availability</h3>
-  <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
-    <div class="term-body"><pre><code><span class="cmd">ReconNinja --check-tools</span>
-<span class="cmt"># Optional: nmap, rustscan, masscan, amass, subfinder, httpx,</span>
-<span class="cmt"># feroxbuster, ffuf, dirsearch, whatweb, nikto, nuclei,</span>
-<span class="cmt"># aquatone, gowitness, wafw00f, dig</span></code></pre></div>
   </div>
 </section>
 
-<!-- 03 QUICK START -->
-<section class="section" id="quickstart">
-  <div class="sec-eyebrow"><span class="sec-num">03</span><div class="sec-line"></div><span class="sec-tag">Quick Start</span></div>
-  <h2>Fire It <span class="hl">Up</span></h2>
+<section id="rn-quickstart" class="tool-section t-rn">
+  <h3 class="sh">Quick Start</h3>
   <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">bash</span></div>
     <div class="term-body"><pre><code><span class="cmt"># Interactive guided setup</span>
 <span class="cmd">ReconNinja</span>
 
@@ -442,509 +459,469 @@ tr:hover td{background:rgba(255,255,255,0.015)}
 <span class="cmt"># Full 21-phase pipeline</span>
 <span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--profile</span> full_suite <span class="fl">-y</span>
 
-<span class="cmt"># v5 intelligence — no keys needed</span>
-<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--whois --wayback --ssl -y</span>
-
 <span class="cmt"># v6 new modules — no keys needed</span>
 <span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
-  <span class="fl">--github-osint --js-extract</span>  \
-  <span class="fl">--cloud-buckets --dns-zone</span>   \
+  <span class="fl">--github-osint --js-extract</span> \
+  <span class="fl">--cloud-buckets --dns-zone</span> \
   <span class="fl">--waf --cors -y</span>
 
-<span class="cmt"># v6 scan diff — compare two JSON reports</span>
-<span class="cmd">ReconNinja</span> <span class="fl">--diff</span> reports/.../20260101/report.json \
-                  reports/.../20260320/report.json
+<span class="cmt"># Scan diff — compare two JSON reports</span>
+<span class="cmd">ReconNinja</span> <span class="fl">--diff</span> report_jan.json report_mar.json
 
-<span class="cmt"># Full v6 suite with Slack notifications</span>
+<span class="cmt"># With Slack notifications</span>
 <span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--profile</span> full_suite \
-  <span class="fl">--shodan --shodan-key</span> KEY \
-  <span class="fl">--vt --vt-key</span> KEY         \
-  <span class="fl">--github-osint --github-token</span> TOKEN \
   <span class="fl">--ai --ai-provider</span> groq <span class="fl">--ai-key</span> KEY \
-  <span class="fl">--notify</span> slack://hooks.slack.com/services/xxx \
-  <span class="fl">-y</span></code></pre></div>
+  <span class="fl">--notify</span> slack://hooks.slack.com/services/xxx <span class="fl">-y</span>
+
+<span class="cmt"># Resume interrupted scan</span>
+<span class="cmd">ReconNinja</span> <span class="fl">--resume</span> reports/example.com_20260320/state.json</code></pre></div>
   </div>
 </section>
 
-<!-- 04 PIPELINE -->
-<section class="section" id="pipeline">
-  <div class="sec-eyebrow"><span class="sec-num">04</span><div class="sec-line"></div><span class="sec-tag">Pipeline</span></div>
-  <h2>21-Phase <span class="hl">Pipeline</span></h2>
-  <p>Each phase feeds results into the next. Completed phases are checkpointed — interrupted scans resume from the last saved state. <span style="color:var(--g);font-family:'JetBrains Mono',monospace;font-size:0.8rem">7 new phases added in v6.</span></p>
+<section id="rn-pipeline" class="tool-section t-rn">
+  <h3 class="sh">21-Phase Pipeline</h3>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:1.5rem">Each phase feeds results into the next. <span style="color:var(--rn-c);font-family:'JetBrains Mono',monospace;font-size:.78rem">7 new phases added in v6.</span> Completed phases are checkpointed for resume.</p>
   <div class="pipeline">
-    <div class="phase"><span class="phase-badge">Phase 1</span><div><div class="phase-name">Passive Recon</div><div class="phase-desc">Subdomain enumeration via amass, subfinder, crt.sh</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 2</span><div><div class="phase-name">RustScan</div><div class="phase-desc">Ultra-fast port discovery across all 65,535 ports. Results persisted for resume (BUG-FIX v6)</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 2b</span><div><div class="phase-name">Async TCP</div><div class="phase-desc">Pure-Python asyncio fallback — no root required</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 3</span><div><div class="phase-name">Masscan</div><div class="phase-desc">Optional SYN sweep (root required)</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 4</span><div><div class="phase-name">Nmap</div><div class="phase-desc">Deep service / version / script analysis on confirmed-open ports</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 4b</span><div><div class="phase-name">CVE Lookup</div><div class="phase-desc">NVD API CVE matching on detected service versions</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 5</span><div><div class="phase-name">httpx</div><div class="phase-desc">Live web detection + technology fingerprinting</div></div></div>
-    <div class="phase new-phase"><span class="phase-badge new">Phase 5b</span><div><div class="phase-name">WAF Detection <span style="font-size:0.65rem;color:var(--g);font-family:'JetBrains Mono',monospace">NEW</span></div><div class="phase-desc">Passive header/cookie fingerprinting + wafw00f. 20 WAF signatures. <span class="ic">--waf</span></div></div></div>
-    <div class="phase new-phase"><span class="phase-badge new">Phase 5c</span><div><div class="phase-name">CORS Scanner <span style="font-size:0.65rem;color:var(--g);font-family:'JetBrains Mono',monospace">NEW</span></div><div class="phase-desc">Crafted Origin probes — detects arbitrary reflection, null origin, wildcard+credentials. <span class="ic">--cors</span></div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 6</span><div><div class="phase-name">Directory Scan</div><div class="phase-desc">feroxbuster → ffuf → dirsearch fallback chain</div></div></div>
-    <div class="phase new-phase"><span class="phase-badge new">Phase 6b</span><div><div class="phase-name">JS Extraction <span style="font-size:0.65rem;color:var(--g);font-family:'JetBrains Mono',monospace">NEW</span></div><div class="phase-desc">Crawl pages, download JS, extract API endpoints + secrets (AWS keys, tokens, connection strings). <span class="ic">--js-extract</span></div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 7</span><div><div class="phase-name">WhatWeb</div><div class="phase-desc">Technology stack fingerprinting</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 8</span><div><div class="phase-name">Nikto</div><div class="phase-desc">Classic web vulnerability scanner</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 9</span><div><div class="phase-name">Nuclei</div><div class="phase-desc">Template-based vulnerability detection</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 10</span><div><div class="phase-name">Screenshots</div><div class="phase-desc">aquatone → gowitness fallback. Now receives full URLs (BUG-FIX v6)</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 11</span><div><div class="phase-name">AI Analysis</div><div class="phase-desc">Groq / Ollama / Gemini / OpenAI. Rule-based fallback now reachable when no key (BUG-FIX v6)</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 12</span><div><div class="phase-name">Intelligence</div><div class="phase-desc">WHOIS · Wayback · SSL · VirusTotal · Shodan</div></div></div>
-    <div class="phase new-phase"><span class="phase-badge new">Phase 13a</span><div><div class="phase-name">GitHub OSINT <span style="font-size:0.65rem;color:var(--g);font-family:'JetBrains Mono',monospace">NEW</span></div><div class="phase-desc">Search for exposed secrets, API keys, config files across public GitHub. <span class="ic">--github-osint</span></div></div></div>
-    <div class="phase new-phase"><span class="phase-badge new">Phase 13b</span><div><div class="phase-name">Cloud Buckets <span style="font-size:0.65rem;color:var(--g);font-family:'JetBrains Mono',monospace">NEW</span></div><div class="phase-desc">Enumerate AWS S3, Azure Blob, GCS for public/authenticated buckets. <span class="ic">--cloud-buckets</span></div></div></div>
-    <div class="phase new-phase"><span class="phase-badge new">Phase 13c</span><div><div class="phase-name">DNS Zone Transfer <span style="font-size:0.65rem;color:var(--g);font-family:'JetBrains Mono',monospace">NEW</span></div><div class="phase-desc">AXFR attempt against all nameservers. Saves full leaked zone to disk. <span class="ic">--dns-zone</span></div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 14</span><div><div class="phase-name">Plugins</div><div class="phase-desc">Drop .py into plugins/ to extend after all phases</div></div></div>
-    <div class="phase"><span class="phase-badge">Phase 15</span><div><div class="phase-name">Reports</div><div class="phase-desc">HTML · JSON · Markdown — all v6 results included</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 1</span><div><div class="pname">Passive Recon</div><div class="pdesc">Subdomain enumeration via amass, subfinder, crt.sh</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 2</span><div><div class="pname">RustScan</div><div class="pdesc">Ultra-fast port discovery across all 65,535 ports (BUG-FIX v6: ports now persisted)</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 2b</span><div><div class="pname">Async TCP</div><div class="pdesc">Pure-Python asyncio fallback — no root required</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 3</span><div><div class="pname">Masscan</div><div class="pdesc">Optional SYN sweep (root required)</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 4</span><div><div class="pname">Nmap</div><div class="pdesc">Deep service / version / script analysis on confirmed-open ports</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 4b</span><div><div class="pname">CVE Lookup</div><div class="pdesc">NVD API CVE matching on detected service versions</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 5</span><div><div class="pname">httpx</div><div class="pdesc">Live web detection + technology fingerprinting</div></div></div>
+    <div class="phase new-p"><span class="pbadge new">Phase 5b ★</span><div><div class="pname">WAF Detection</div><div class="pdesc">20 WAF signatures — passive header fingerprinting + wafw00f. <span class="ic">--waf</span></div></div></div>
+    <div class="phase new-p"><span class="pbadge new">Phase 5c ★</span><div><div class="pname">CORS Scanner</div><div class="pdesc">Crafted Origin probes — arbitrary reflection, null origin, wildcard+credentials. <span class="ic">--cors</span></div></div></div>
+    <div class="phase"><span class="pbadge">Phase 6</span><div><div class="pname">Directory Scan</div><div class="pdesc">feroxbuster → ffuf → dirsearch fallback chain</div></div></div>
+    <div class="phase new-p"><span class="pbadge new">Phase 6b ★</span><div><div class="pname">JS Extraction</div><div class="pdesc">Download JS, extract API endpoints + secrets. <span class="ic">--js-extract</span></div></div></div>
+    <div class="phase"><span class="pbadge">Phase 7–9</span><div><div class="pname">WhatWeb · Nikto · Nuclei</div><div class="pdesc">Technology fingerprinting, web vulnerabilities, template-based detection</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 10</span><div><div class="pname">Screenshots</div><div class="pdesc">aquatone → gowitness fallback (BUG-FIX v6: now receives full URLs)</div></div></div>
+    <div class="phase"><span class="pbadge">Phase 11</span><div><div class="pname">AI Analysis</div><div class="pdesc">Groq / Ollama / Gemini / OpenAI. Rule-based fallback fixed in v6. <span class="ic">--ai</span></div></div></div>
+    <div class="phase"><span class="pbadge">Phase 12</span><div><div class="pname">Intelligence</div><div class="pdesc">WHOIS · Wayback · SSL · VirusTotal · Shodan</div></div></div>
+    <div class="phase new-p"><span class="pbadge new">Phase 13a ★</span><div><div class="pname">GitHub OSINT</div><div class="pdesc">Search public GitHub for exposed secrets and config files. <span class="ic">--github-osint</span></div></div></div>
+    <div class="phase new-p"><span class="pbadge new">Phase 13b ★</span><div><div class="pname">Cloud Buckets</div><div class="pdesc">AWS S3, Azure Blob, GCS public bucket enumeration. <span class="ic">--cloud-buckets</span></div></div></div>
+    <div class="phase new-p"><span class="pbadge new">Phase 13c ★</span><div><div class="pname">DNS Zone Transfer</div><div class="pdesc">AXFR against all nameservers. Saves leaked zone. <span class="ic">--dns-zone</span></div></div></div>
+    <div class="phase"><span class="pbadge">Phase 14–15</span><div><div class="pname">Plugins · Reports</div><div class="pdesc">Custom plugin execution + HTML / JSON / Markdown report generation</div></div></div>
   </div>
 </section>
 
-<!-- 05 PROFILES -->
-<section class="section" id="profiles">
-  <div class="sec-eyebrow"><span class="sec-num">05</span><div class="sec-line"></div><span class="sec-tag">Profiles</span></div>
-  <h2>Scan <span class="hl">Profiles</span></h2>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Profile</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>fast</td><td>Top 100 ports, no scripts</td></tr>
-        <tr><td>standard</td><td>Top 1000 ports, scripts + version detection <em style="color:var(--text2)">(default)</em></td></tr>
-        <tr><td>thorough</td><td>All ports, OS detection, aggressive scripts</td></tr>
-        <tr><td>stealth</td><td>SYN scan, low timing, no banners</td></tr>
-        <tr><td>web_only</td><td>httpx + directory scan + nuclei</td></tr>
-        <tr><td>port_only</td><td>RustScan + Masscan + Nmap only</td></tr>
-        <tr><td>full_suite</td><td>All 21 phases — enables all intelligence + v6 modules</td></tr>
-        <tr><td>custom</td><td>Interactive CLI builder</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- 06 FLAGS -->
-<section class="section" id="flags">
-  <div class="sec-eyebrow"><span class="sec-num">06</span><div class="sec-line"></div><span class="sec-tag">Reference</span></div>
-  <h2>All <span class="hl">Flags</span></h2>
-
-  <h3>Target</h3>
+<section id="rn-flags" class="tool-section t-rn">
+  <h3 class="sh">Key Flags</h3>
   <div class="flag-block">
     <div class="flag-row"><span class="flag-name">-t, --target</span><span class="flag-desc">Domain, IP, CIDR, or path to list file</span></div>
     <div class="flag-row"><span class="flag-name">-p, --profile</span><span class="flag-desc">fast · standard · thorough · stealth · web_only · port_only · full_suite · custom</span></div>
-    <div class="flag-row"><span class="flag-name">-y, --yes</span><span class="flag-desc">Skip confirmation prompt (CI/automation)</span></div>
-  </div>
-
-  <h3>Port Scanning</h3>
-  <div class="flag-block">
     <div class="flag-row"><span class="flag-name">--all-ports</span><span class="flag-desc">Scan all 65,535 ports</span></div>
-    <div class="flag-row"><span class="flag-name">--top-ports N</span><span class="flag-desc">Scan top N ports (default: 1000)</span></div>
-    <div class="flag-row"><span class="flag-name">--timing T1-T5</span><span class="flag-desc">Nmap timing template (default: T4)</span></div>
-    <div class="flag-row"><span class="flag-name">--rustscan</span><span class="flag-desc">Enable RustScan pre-scan</span></div>
-    <div class="flag-row"><span class="flag-name">--masscan</span><span class="flag-desc">Enable Masscan sweep (root required)</span></div>
-    <div class="flag-row"><span class="flag-name">--masscan-rate N</span><span class="flag-desc">Masscan packets/sec (default: 5000)</span></div>
-    <div class="flag-row"><span class="flag-name">--async-concurrency</span><span class="flag-desc">Async TCP concurrency (default: 1000)</span></div>
-    <div class="flag-row"><span class="flag-name">--async-timeout</span><span class="flag-desc">Async TCP timeout in seconds (default: 1.5)</span></div>
-  </div>
-
-  <h3>Web & Discovery</h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name">--httpx</span><span class="flag-desc">Live web service detection and fingerprinting</span></div>
-    <div class="flag-row"><span class="flag-name">--whatweb</span><span class="flag-desc">WhatWeb technology fingerprinting</span></div>
-    <div class="flag-row"><span class="flag-name">--ferox</span><span class="flag-desc">Feroxbuster directory scan</span></div>
-    <div class="flag-row"><span class="flag-name">--nikto</span><span class="flag-desc">Nikto web vulnerability scanner</span></div>
-    <div class="flag-row"><span class="flag-name">--nuclei</span><span class="flag-desc">Nuclei template-based vulnerability detection</span></div>
-    <div class="flag-row"><span class="flag-name">--aquatone</span><span class="flag-desc">Screenshot capture (gowitness fallback)</span></div>
-    <div class="flag-row"><span class="flag-name">--subdomains</span><span class="flag-desc">Subdomain enumeration</span></div>
-    <div class="flag-row"><span class="flag-name">--wordlist-size</span><span class="flag-desc">small · medium · large</span></div>
-  </div>
-
-  <h3>Vulnerability Intelligence</h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name">--cve</span><span class="flag-desc">NVD CVE lookup for detected services</span></div>
-    <div class="flag-row"><span class="flag-name">--nvd-key KEY</span><span class="flag-desc">NVD API key — raises rate limit from 5 to 50 req/30s</span></div>
-  </div>
-
-  <h3>Intelligence Integrations</h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name">--shodan</span><span class="flag-desc">Shodan host intelligence lookup</span></div>
-    <div class="flag-row"><span class="flag-name">--shodan-key KEY</span><span class="flag-desc">Shodan API key</span></div>
-    <div class="flag-row"><span class="flag-name">--vt</span><span class="flag-desc">VirusTotal reputation — auto-routes domain vs IP endpoint</span></div>
-    <div class="flag-row"><span class="flag-name">--vt-key KEY</span><span class="flag-desc">VirusTotal API key</span></div>
-    <div class="flag-row"><span class="flag-name">--whois</span><span class="flag-desc">WHOIS lookup (no key needed)</span></div>
-    <div class="flag-row"><span class="flag-name">--wayback</span><span class="flag-desc">Wayback Machine URL discovery (no key needed)</span></div>
-    <div class="flag-row"><span class="flag-name">--ssl</span><span class="flag-desc">SSL/TLS certificate analysis (no key needed)</span></div>
-  </div>
-
-  <h3>v6 New Modules <span class="new-tag">NEW</span></h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name new-flag">--github-osint</span><span class="flag-desc">Search GitHub for exposed secrets, API keys, and config files</span></div>
-    <div class="flag-row"><span class="flag-name new-flag">--github-token KEY</span><span class="flag-desc">GitHub personal access token — raises rate limit 60 → 5000 req/hr</span></div>
-    <div class="flag-row"><span class="flag-name new-flag">--js-extract</span><span class="flag-desc">Crawl JS files from live pages; extract API endpoints and credentials</span></div>
-    <div class="flag-row"><span class="flag-name new-flag">--cloud-buckets</span><span class="flag-desc">Enumerate AWS S3, Azure Blob, GCS buckets for public/authenticated access</span></div>
-    <div class="flag-row"><span class="flag-name new-flag">--dns-zone</span><span class="flag-desc">DNS zone transfer (AXFR) check against all discovered nameservers</span></div>
-    <div class="flag-row"><span class="flag-name new-flag">--waf</span><span class="flag-desc">WAF detection — passive header fingerprinting + wafw00f (20 WAF signatures)</span></div>
-    <div class="flag-row"><span class="flag-name new-flag">--cors</span><span class="flag-desc">CORS misconfiguration scanner — arbitrary origin, null origin, wildcard+credentials</span></div>
-  </div>
-
-  <h3>Scan Diff <span class="new-tag">NEW</span></h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name new-flag">--diff A.json B.json</span><span class="flag-desc">Compare two ReconNinja JSON reports — new/closed ports, new vulns, new subdomains</span></div>
-  </div>
-
-  <h3>Notifications <span class="new-tag">NEW</span></h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name new-flag">--notify URL</span><span class="flag-desc">Mid-scan webhook alerts. Supports <span class="ic">slack://</span>, <span class="ic">discord://</span>, or any <span class="ic">https://</span> endpoint</span></div>
-  </div>
-
-  <h3>AI Analysis</h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name">--ai</span><span class="flag-desc">Enable AI threat analysis</span></div>
-    <div class="flag-row"><span class="flag-name">--ai-provider</span><span class="flag-desc">groq · ollama · gemini · openai (default: groq)</span></div>
-    <div class="flag-row"><span class="flag-name">--ai-key KEY</span><span class="flag-desc">API key (not required for ollama)</span></div>
-    <div class="flag-row"><span class="flag-name">--ai-model MODEL</span><span class="flag-desc">Override the default model for selected provider</span></div>
-  </div>
-
-  <h3>Output</h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name">--output DIR</span><span class="flag-desc">Output directory (default: reports/)</span></div>
-    <div class="flag-row"><span class="flag-name">--output-format FMT</span><span class="flag-desc">all · html · json · md · txt (default: all)</span></div>
-    <div class="flag-row"><span class="flag-name">--exclude PHASES</span><span class="flag-desc">Comma-separated phases to skip: passive, port, web, vuln</span></div>
-    <div class="flag-row"><span class="flag-name">--timeout N</span><span class="flag-desc">Global per-operation timeout seconds (default: 30)</span></div>
-    <div class="flag-row"><span class="flag-name">--rate-limit N</span><span class="flag-desc">Seconds between requests (default: 0)</span></div>
-  </div>
-
-  <h3>Scan Management</h3>
-  <div class="flag-block">
-    <div class="flag-row"><span class="flag-name">--resume FILE</span><span class="flag-desc">Resume interrupted scan from state.json</span></div>
-    <div class="flag-row"><span class="flag-name">--update</span><span class="flag-desc">Check GitHub for updates and install latest</span></div>
-    <div class="flag-row"><span class="flag-name">--force-update</span><span class="flag-desc">Update even if already on latest version</span></div>
-    <div class="flag-row"><span class="flag-name">--check-tools</span><span class="flag-desc">Show availability of all optional tools</span></div>
+    <div class="flag-row"><span class="flag-name">--shodan --shodan-key</span><span class="flag-desc">Shodan host intelligence</span></div>
+    <div class="flag-row"><span class="flag-name">--vt --vt-key</span><span class="flag-desc">VirusTotal reputation (auto-routes domain vs IP)</span></div>
+    <div class="flag-row"><span class="flag-name">--whois --wayback --ssl</span><span class="flag-desc">Free intelligence modules — no keys needed</span></div>
+    <div class="flag-row"><span class="flag-name">--ai --ai-provider</span><span class="flag-desc">AI analysis — groq · ollama · gemini · openai</span></div>
+    <div class="flag-row"><span class="flag-name new">--github-osint</span><span class="flag-desc">GitHub secret hunting <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name new">--js-extract</span><span class="flag-desc">JS endpoint + credential extraction <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name new">--cloud-buckets</span><span class="flag-desc">AWS S3, Azure Blob, GCS enumeration <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name new">--dns-zone</span><span class="flag-desc">DNS zone transfer (AXFR) <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name new">--waf</span><span class="flag-desc">WAF detection — 20 signatures <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name new">--cors</span><span class="flag-desc">CORS misconfiguration scanner <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name new">--diff A.json B.json</span><span class="flag-desc">Compare two scan reports <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name new">--notify URL</span><span class="flag-desc">Mid-scan Slack / Discord / webhook alerts <span class="badge new">v6</span></span></div>
+    <div class="flag-row"><span class="flag-name">--resume FILE</span><span class="flag-desc">Resume from state.json checkpoint</span></div>
+    <div class="flag-row"><span class="flag-name">-y, --yes</span><span class="flag-desc">Skip confirmation (CI/automation)</span></div>
   </div>
 </section>
 
-<!-- 07 CHANGELOG -->
-<section class="section" id="changelog">
-  <div class="sec-eyebrow"><span class="sec-num">07</span><div class="sec-line"></div><span class="sec-tag">History</span></div>
-  <h2>Change<span class="hl">log</span></h2>
-  <div class="cl">
-
-    <div class="cl-row">
-      <div class="cl-tag major">6.0.0</div>
-      <div class="cl-body">
-        <div class="cl-meta">2026-03-20 &nbsp;·&nbsp; MAJOR &nbsp;·&nbsp; 598 tests</div>
-        <div class="cl-title">8 bugs fixed · 6 new recon modules · scan diff · notifications · full version migration</div>
-        <div class="cl-section">Bug Fixes</div>
-        <ul class="cl-items">
-          <li><span style="color:var(--r)">[Critical]</span> <span class="ic">subdomains.py</span> — <span class="ic">_dns_brute</span> args in wrong order; <span class="ic">BUILTIN_SUBS</span> landing in <span class="ic">out_file</span> slot → <span class="ic">TypeError</span> at runtime on machines without SecLists</li>
-          <li><span style="color:var(--y)">[High]</span> <span class="ic">orchestrator.py</span> — RustScan ports not persisted; <span class="ic">all_open_ports</span> empty on <span class="ic">--resume</span> → Nmap skipped entirely</li>
-          <li><span style="color:var(--y)">[High]</span> <span class="ic">updater.py</span> — <span class="ic">backup</span> variable referenced before assignment on fresh install → <span class="ic">UnboundLocalError</span></li>
-          <li><span style="color:var(--y)">[High]</span> <span class="ic">orchestrator.py</span> — AI fallback <span class="ic">_generate_ai_analysis()</span> was dead code; condition always <span class="ic">True</span> → no-key users got raw error object in report</li>
-          <li><span style="color:var(--b)">[Medium]</span> <span class="ic">ports.py</span> — Banner grabber sent <span class="ic">HEAD / HTTP/1.0</span> immediately; SSH/FTP/SMTP disconnected → banner capture failed on all non-HTTP ports</li>
-          <li><span style="color:var(--b)">[Medium]</span> <span class="ic">orchestrator.py</span> — Aquatone received bare hostnames (<span class="ic">sub_file</span>) instead of full URLs (<span class="ic">url_file</span>) → screenshots broken</li>
-          <li><span style="color:var(--b)">[Medium]</span> <span class="ic">cve_lookup.py</span> — NVD delay only fired on hits; empty-result queries burst past 5 req/30s → silent 403s</li>
-          <li><span style="color:var(--text2)">[Low]</span> <span class="ic">utils/updater.py</span> — Stale duplicate of <span class="ic">core/updater.py</span>, never imported, missing subprocess timeout → deleted</li>
-        </ul>
-        <div class="cl-section">New Modules</div>
-        <ul class="cl-items">
-          <li><span class="ic">core/github_osint.py</span> — Search GitHub for secrets, API keys, and config files. 10 secret patterns × 6 file patterns. <span class="ic">--github-osint</span></li>
-          <li><span class="ic">core/js_extractor.py</span> — Download JS files from live pages, extract API endpoints, detect credentials (AWS, GitHub, Stripe, connections strings). <span class="ic">--js-extract</span></li>
-          <li><span class="ic">core/cloud_buckets.py</span> — Enumerate AWS S3, Azure Blob, GCS with ~60 name candidates. Finds public and authenticated-only buckets. <span class="ic">--cloud-buckets</span></li>
-          <li><span class="ic">core/dns_zone_transfer.py</span> — AXFR attempt with dnspython + raw TCP fallback. Saves leaked zone records. <span class="ic">--dns-zone</span></li>
-          <li><span class="ic">core/waf_detect.py</span> — 20 WAF signatures via header/cookie/body + active blocking test + wafw00f integration. <span class="ic">--waf</span></li>
-          <li><span class="ic">core/cors_scan.py</span> — Crafted Origin probes: arbitrary reflection, wildcard+credentials (critical), null origin, subdomain bypass. <span class="ic">--cors</span></li>
-        </ul>
-        <div class="cl-section">Utilities</div>
-        <ul class="cl-items">
-          <li><span class="ic">core/scan_diff.py</span> — Diff any two JSON reports: new/closed ports, changed versions, new vulns, new subdomains, new technologies. <span class="ic">--diff A.json B.json</span></li>
-          <li><span class="ic">utils/notify.py</span> — Thread-safe webhook alerts (Slack, Discord, generic JSON). Fires mid-scan on critical findings. <span class="ic">--notify URL</span></li>
-        </ul>
-        <div class="cl-section">Version Migration</div>
-        <ul class="cl-items">
-          <li>All <span class="ic">v5.2.2</span> / <span class="ic">5.0.0</span> references updated to <span class="ic">v6.0.0</span> across all 43 source files, configs, and tests</li>
-          <li><span class="ic">pyproject.toml</span> — version <span class="ic">5.2.2 → 6.0.0</span>; description updated to "21-phase"; <span class="ic">[dns]</span> optional group added</li>
-          <li><span class="ic">ReconResult</span> gains 7 new fields; <span class="ic">ScanConfig</span> gains 8 new fields — v5 <span class="ic">state.json</span> files are forward-compatible</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="cl-row">
-      <div class="cl-tag bugfix">5.2.2</div>
-      <div class="cl-body">
-        <div class="cl-meta">2026-03-18 &nbsp;·&nbsp; BUGFIX</div>
-        <div class="cl-title">15 bugs fixed — pyflakes clean across all 21 source files</div>
-        <ul class="cl-items">
-          <li>Unused imports cleaned across 8 files; unnecessary f-string prefixes removed from 7 static strings</li>
-          <li><span class="ic">report_html.py</span> footer / subtitle version updated from <span class="ic">v3.3</span> to <span class="ic">v5.2.2</span></li>
-          <li>Dead variables (<span class="ic">status</span>, <span class="ic">der_cert</span>, <span class="ic">tmp_builtin</span>) removed from wayback, ssl_scan, subdomains</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="cl-row">
-      <div class="cl-tag bugfix">5.2.1</div>
-      <div class="cl-body">
-        <div class="cl-meta">2026-03-13 &nbsp;·&nbsp; BUGFIX</div>
-        <div class="cl-title">9 bugs fixed — 597 tests passing</div>
-        <ul class="cl-items">
-          <li><span class="ic">--exclude</span> flag now actually skips phases</li>
-          <li>VirusTotal correctly routes to IP endpoint for IP targets</li>
-          <li>Screenshots work with no subdomains — uses live web targets as fallback</li>
-          <li>Phase 2b Async TCP now respects <span class="ic">--exclude port</span></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="cl-row">
-      <div class="cl-tag feat">5.0.0</div>
-      <div class="cl-body">
-        <div class="cl-meta">2026-03-09 &nbsp;·&nbsp; FEATURES</div>
-        <div class="cl-title">Shodan, VirusTotal, WHOIS, Wayback, SSL + full pip publish</div>
-        <ul class="cl-items">
-          <li>5 intelligence modules, 3 requiring zero API keys</li>
-          <li><span class="ic">--output-format</span>, <span class="ic">--exclude</span>, <span class="ic">--timeout</span>, <span class="ic">--rate-limit</span> flags</li>
-          <li><span class="ic">pyproject.toml</span> + PyPI support with <span class="ic">[ai]</span> and <span class="ic">[full]</span> extras</li>
-        </ul>
-      </div>
-    </div>
-
+<section id="rn-ai" class="tool-section t-rn">
+  <h3 class="sh">AI Analysis</h3>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:1.25rem">Phase 11 feeds all results into an LLM for threat prioritisation. Rule-based fallback runs automatically when no key is provided (BUG-FIX v6).</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Provider</th><th>Default Model</th><th>Key</th></tr></thead>
+      <tbody>
+        <tr><td>groq</td><td>llama3-70b-8192</td><td>Required</td></tr>
+        <tr><td>ollama</td><td>llama3</td><td>None — local</td></tr>
+        <tr><td>gemini</td><td>gemini-1.5-flash</td><td>Required</td></tr>
+        <tr><td>openai</td><td>gpt-4o-mini</td><td>Required</td></tr>
+        <tr><td style="color:var(--g2)">rule-based</td><td>Built-in</td><td>None — auto-fallback</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="terminal">
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">bash</span></div>
+    <div class="term-body"><pre><code><span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--ai --ai-key</span> YOUR_GROQ_KEY
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--ai --ai-provider</span> ollama  <span class="cmt"># local, free</span>
+<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--ai</span>  <span class="cmt"># rule-based fallback (no key needed)</span></code></pre></div>
   </div>
 </section>
 
-<!-- 08 BUG FIXES -->
-<section class="section" id="bugfixes">
-  <div class="sec-eyebrow"><span class="sec-num">08</span><div class="sec-line"></div><span class="sec-tag">v6.0.0 — Bug Fixes</span></div>
-  <h2>8 Bugs <span class="hl">Fixed</span></h2>
-  <p>All 8 bugs identified in a comprehensive code review were fixed in v6.0.0.</p>
-  <table class="bug-table">
-    <thead><tr><th>#</th><th>Sev</th><th>File</th><th>Description</th></tr></thead>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- ░░░  VAULTHOUND  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+
+<section id="vh-overview" class="tool-section t-vh">
+  <div class="ts-header">
+    <div class="ts-icon">🐾</div>
+    <div class="ts-meta">
+      <div class="ts-eyebrow">// 02 · VaultHound</div>
+      <div class="ts-title">VAULT<span class="hl">HOUND</span></div>
+      <p class="ts-desc">Secret & credential scanner — hunts API keys, passwords, tokens, and hardcoded secrets in live URLs, local directories, and git history. 43 detection patterns with entropy-based false positive filtering.</p>
+      <div class="ts-chips">
+        <span class="chip" style="color:var(--vh-c);border-color:rgba(180,122,255,.25)">v1.0.0</span>
+        <span class="chip">Python 3.10+</span><span class="chip">43 Patterns</span><span class="chip">MIT</span><span class="chip">PyPI</span>
+      </div>
+    </div>
+  </div>
+  <div class="warn"><span class="warn-icon">⚠</span><span>Authorized use only. Only scan targets you own or have explicit written permission to test.</span></div>
+  <div class="feat-grid">
+    <div class="feat"><span class="feat-icon">🌐</span><div class="feat-title">URL Mode</div><div class="feat-desc">Fetches HTML, JS files, API responses, and probes 15 common secret-exposing paths.</div></div>
+    <div class="feat"><span class="feat-icon">📁</span><div class="feat-title">Directory Mode</div><div class="feat-desc">Recursively scans repos, configs, and source files across 25+ file types.</div></div>
+    <div class="feat"><span class="feat-icon">📜</span><div class="feat-title">Git History</div><div class="feat-desc">Walks commit diffs to catch secrets committed then deleted from history.</div></div>
+    <div class="feat"><span class="feat-icon">🔬</span><div class="feat-title">Entropy Filter</div><div class="feat-desc">Eliminates placeholder / example false positives using Shannon entropy.</div></div>
+    <div class="feat"><span class="feat-icon">📊</span><div class="feat-title">Dark HTML Report</div><div class="feat-desc">Same aesthetic as ReconNinja — dark-mode dashboard that works standalone.</div></div>
+    <div class="feat"><span class="feat-icon">🔌</span><div class="feat-title">ReconNinja Plugin</div><div class="feat-desc">Drop <span class="ic">vaulthound_plugin.py</span> into ReconNinja's plugins/ — runs automatically as a phase.</div></div>
+  </div>
+</section>
+
+<section id="vh-usage" class="tool-section t-vh">
+  <h3 class="sh" style="--tc:var(--vh-c)">Usage</h3>
+  <div class="terminal">
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">bash</span></div>
+    <div class="term-body"><pre><code><span class="cmt"># Install</span>
+<span class="cmd">pip install</span> vaulthound
+
+<span class="cmt"># Scan a live URL (HTML + JS + 15 sensitive path probes)</span>
+<span class="cmd">vaulthound</span> <span class="fl">-u</span> https://example.com
+
+<span class="cmt"># Scan a local directory</span>
+<span class="cmd">vaulthound</span> <span class="fl">-d</span> /path/to/repo
+
+<span class="cmt"># Directory + full git history</span>
+<span class="cmd">vaulthound</span> <span class="fl">-d</span> /path/to/repo <span class="fl">--git</span>
+
+<span class="cmt"># Deep JS scanning</span>
+<span class="cmd">vaulthound</span> <span class="fl">-u</span> https://example.com <span class="fl">--js</span>
+
+<span class="cmt"># Only critical and high severity</span>
+<span class="cmd">vaulthound</span> <span class="fl">-d</span> . <span class="fl">--severity</span> high
+
+<span class="cmt"># Custom output directory + skip prompt</span>
+<span class="cmd">vaulthound</span> <span class="fl">-d</span> . <span class="fl">--output</span> /tmp/results <span class="fl">-y</span></code></pre></div>
+  </div>
+</section>
+
+<section id="vh-patterns" class="tool-section t-vh">
+  <h3 class="sh">43 Detection Patterns</h3>
+  <div class="pat-grid">
+    <div class="pat"><span class="pat-ico">☁️</span><div><div class="pat-cat">Cloud</div><div class="pat-items">AWS Access Key, AWS Secret, GCP API Key, GCP Service Account, Azure Storage Key, Azure Connection String</div></div></div>
+    <div class="pat"><span class="pat-ico">💳</span><div><div class="pat-cat">Payment</div><div class="pat-items">Stripe live/restricted, Square, PayPal/Braintree</div></div></div>
+    <div class="pat"><span class="pat-ico">📡</span><div><div class="pat-cat">Communication</div><div class="pat-items">Twilio, SendGrid, Mailgun, Slack bot/user/webhook, Discord</div></div></div>
+    <div class="pat"><span class="pat-ico">🐙</span><div><div class="pat-cat">Source Control</div><div class="pat-items">GitHub PAT/OAuth/App Token, GitLab Token, NPM Token, PyPI Token</div></div></div>
+    <div class="pat"><span class="pat-ico">🤖</span><div><div class="pat-cat">AI / LLM</div><div class="pat-items">OpenAI, Anthropic/Claude, Groq, HuggingFace</div></div></div>
+    <div class="pat"><span class="pat-ico">🗄️</span><div><div class="pat-cat">Database</div><div class="pat-items">MySQL, PostgreSQL, MongoDB, Redis connection strings, MongoDB Atlas URI</div></div></div>
+    <div class="pat"><span class="pat-ico">🔑</span><div><div class="pat-cat">Private Keys</div><div class="pat-items">RSA, EC, OpenSSH, PGP private key blocks</div></div></div>
+    <div class="pat"><span class="pat-ico">🎫</span><div><div class="pat-cat">Generic Tokens</div><div class="pat-items">JWT, generic API keys, generic passwords, generic tokens, Bearer tokens</div></div></div>
+  </div>
+</section>
+
+<section id="vh-output" class="tool-section t-vh">
+  <h3 class="sh">Output</h3>
+  <p style="font-size:.85rem;color:var(--text2);margin-bottom:1.25rem">Reports saved to <span class="ic">vaulthound_reports/&lt;target&gt;_&lt;timestamp&gt;/</span></p>
+  <div class="tbl"><table>
+    <thead><tr><th>File</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">1</td><td><span class="sev crit">Critical</span></td><td><span class="ic" style="font-size:0.7rem">subdomains.py</span></td><td style="font-size:0.78rem"><span class="ic" style="font-size:0.68rem">_dns_brute</span> arg order — <span class="ic" style="font-size:0.68rem">BUILTIN_SUBS</span> received as <span class="ic" style="font-size:0.68rem">out_file</span>, causing <span class="ic" style="font-size:0.68rem">TypeError</span> on machines without SecLists or external tools</td></tr>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">2</td><td><span class="sev high">High</span></td><td><span class="ic" style="font-size:0.7rem">orchestrator.py</span></td><td style="font-size:0.78rem">RustScan ports not persisted to <span class="ic" style="font-size:0.68rem">ReconResult</span> — on <span class="ic" style="font-size:0.68rem">--resume</span>, <span class="ic" style="font-size:0.68rem">all_open_ports</span> was always empty → Nmap skipped entirely</td></tr>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">3</td><td><span class="sev high">High</span></td><td><span class="ic" style="font-size:0.7rem">updater.py</span></td><td style="font-size:0.78rem"><span class="ic" style="font-size:0.68rem">backup</span> variable used before assignment on fresh installs → <span class="ic" style="font-size:0.68rem">UnboundLocalError</span>, hiding the real failure</td></tr>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">4</td><td><span class="sev high">High</span></td><td><span class="ic" style="font-size:0.7rem">orchestrator.py</span></td><td style="font-size:0.78rem">AI fallback was dead code — condition <span class="ic" style="font-size:0.68rem">if cfg.ai_provider != ""</span> always <span class="ic" style="font-size:0.68rem">True</span>; no-key users got raw error in report</td></tr>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">5</td><td><span class="sev med">Medium</span></td><td><span class="ic" style="font-size:0.7rem">ports.py</span></td><td style="font-size:0.78rem">Banner grabber sent <span class="ic" style="font-size:0.68rem">HEAD / HTTP/1.0</span> to every port immediately — SSH/FTP/Redis disconnect on unexpected HTTP</td></tr>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">6</td><td><span class="sev med">Medium</span></td><td><span class="ic" style="font-size:0.7rem">orchestrator.py</span></td><td style="font-size:0.78rem">Aquatone received <span class="ic" style="font-size:0.68rem">sub_file</span> (bare hostnames) not <span class="ic" style="font-size:0.68rem">url_file</span> (full URLs) → screenshots completely broken</td></tr>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">7</td><td><span class="sev med">Medium</span></td><td><span class="ic" style="font-size:0.7rem">cve_lookup.py</span></td><td style="font-size:0.78rem">NVD delay only fired when CVEs found; no-result queries burst over 5 req/30s limit → silent HTTP 403s</td></tr>
-      <tr><td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text2)">8</td><td><span class="sev low">Low</span></td><td><span class="ic" style="font-size:0.7rem">utils/updater.py</span></td><td style="font-size:0.78rem">Stale duplicate of <span class="ic" style="font-size:0.68rem">core/updater.py</span>, never imported anywhere, missing <span class="ic" style="font-size:0.68rem">timeout=300</span> — deleted</td></tr>
+      <tr><td>report.html</td><td>Dark-mode HTML dashboard — open in browser</td></tr>
+      <tr><td>report.json</td><td>Machine-readable findings for pipeline integration</td></tr>
+      <tr><td>report.txt</td><td>Plain text summary</td></tr>
+      <tr><td>vaulthound.log</td><td>Full debug log</td></tr>
+      <tr><td>scan_config.json</td><td>Exact configuration used</td></tr>
     </tbody>
-  </table>
+  </table></div>
 </section>
 
-<!-- 09 NEW MODULES -->
-<section class="section" id="newmodules">
-  <div class="sec-eyebrow"><span class="sec-num">09</span><div class="sec-line"></div><span class="sec-tag">v6.0.0 — New Modules</span></div>
-  <h2>6 New <span class="hl">Modules</span></h2>
-  <p>Every new module is pure Python — no external tools required. They integrate directly into the pipeline and report fully into HTML/JSON/Markdown output.</p>
-  <div class="card-grid">
-    <div class="card new-card"><span class="card-icon">🐙</span><div class="card-title">GitHub OSINT</div><div class="card-desc">Search public GitHub for exposed secrets, credentials, and config files belonging to the target org. 10 secret + 6 file patterns.</div><span class="card-pill new">--github-osint</span></div>
-    <div class="card new-card"><span class="card-icon">📜</span><div class="card-title">JS Extraction</div><div class="card-desc">Crawl live pages, fetch JS files, extract API endpoint paths and scan for credentials (AWS keys, GitHub tokens, Stripe, connection strings).</div><span class="card-pill new">--js-extract</span></div>
-    <div class="card new-card"><span class="card-icon">🪣</span><div class="card-title">Cloud Buckets</div><div class="card-desc">Probe ~60 name candidates × 3 providers: AWS S3, Azure Blob, GCS. Identifies publicly listable and authenticated-only buckets.</div><span class="card-pill new">--cloud-buckets</span></div>
-    <div class="card new-card"><span class="card-icon">🌐</span><div class="card-title">DNS Zone Transfer</div><div class="card-desc">AXFR attempt against every nameserver. Uses dnspython if available, falls back to raw TCP. Saves full leaked zone to disk.</div><span class="card-pill new">--dns-zone</span></div>
-    <div class="card new-card"><span class="card-icon">🛡️</span><div class="card-title">WAF Detection</div><div class="card-desc">20 WAF fingerprint signatures via headers, cookies, and body. Active blocking test with crafted XSS payload. wafw00f integration.</div><span class="card-pill new">--waf</span></div>
-    <div class="card new-card"><span class="card-icon">🔀</span><div class="card-title">CORS Scanner</div><div class="card-desc">6 crafted Origin headers. Detects: arbitrary reflection, wildcard+credentials (critical), null origin, subdomain bypass vectors.</div><span class="card-pill new">--cors</span></div>
-  </div>
-</section>
 
-<!-- 10 INTELLIGENCE -->
-<section class="section" id="intelligence">
-  <div class="sec-eyebrow"><span class="sec-num">10</span><div class="sec-line"></div><span class="sec-tag">Intelligence</span></div>
-  <h2>Intelligence <span class="hl">Modules</span></h2>
-  <p>11 modules total — 8 free, 3 require API keys. All results checkpointed and fully restored on <span class="ic">--resume</span>.</p>
-  <div class="card-grid">
-    <div class="card"><span class="card-icon">🔍</span><div class="card-title">WHOIS</div><div class="card-desc">Registrar, expiry, nameservers, registrant, emails.</div><span class="card-pill">No key</span></div>
-    <div class="card"><span class="card-icon">📼</span><div class="card-title">Wayback Machine</div><div class="card-desc">Historical URL discovery. Surfaces old <span class="ic">.env</span>, <span class="ic">/admin</span>, <span class="ic">.sql</span> files.</div><span class="card-pill">No key</span></div>
-    <div class="card"><span class="card-icon">🔒</span><div class="card-title">SSL/TLS</div><div class="card-desc">Certificate expiry, weak ciphers (RC4, DES), old protocols (TLS 1.0/1.1).</div><span class="card-pill">No key</span></div>
-    <div class="card"><span class="card-icon">🌐</span><div class="card-title">DNS Zone Transfer</div><div class="card-desc">AXFR vulnerability — leaks the entire DNS zone if misconfigured.</div><span class="card-pill new">v6 · No key</span></div>
-    <div class="card"><span class="card-icon">🦠</span><div class="card-title">VirusTotal</div><div class="card-desc">Domain/IP reputation. Auto-routes to correct endpoint.</div><span class="card-pill">Free tier</span></div>
-    <div class="card"><span class="card-icon">📡</span><div class="card-title">Shodan</div><div class="card-desc">Host intelligence — ports, banners, known CVEs, org, ISP.</div><span class="card-pill">Free tier</span></div>
-    <div class="card"><span class="card-icon">🔑</span><div class="card-title">CVE Lookup</div><div class="card-desc">NVD API CVE matching on Nmap-detected service versions.</div><span class="card-pill">Optional key</span></div>
-    <div class="card"><span class="card-icon">🐙</span><div class="card-title">GitHub OSINT</div><div class="card-desc">Exposed secrets, API keys, config files on GitHub.</div><span class="card-pill new">v6 · Optional key</span></div>
-    <div class="card"><span class="card-icon">📜</span><div class="card-title">JS Extraction</div><div class="card-desc">Endpoints + credentials from JS files on live pages.</div><span class="card-pill new">v6 · No key</span></div>
-    <div class="card"><span class="card-icon">🪣</span><div class="card-title">Cloud Buckets</div><div class="card-desc">AWS S3, Azure Blob, GCS public bucket enumeration.</div><span class="card-pill new">v6 · No key</span></div>
-    <div class="card"><span class="card-icon">🔀</span><div class="card-title">CORS Scanner</div><div class="card-desc">CORS misconfiguration detection across live endpoints.</div><span class="card-pill new">v6 · No key</span></div>
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- ░░░  ENVLEAKS  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+
+<section id="el-overview" class="tool-section t-el">
+  <div class="ts-header">
+    <div class="ts-icon">🔐</div>
+    <div class="ts-meta">
+      <div class="ts-eyebrow">// 03 · envleaks</div>
+      <div class="ts-title">ENV<span class="hl">LEAKS</span></div>
+      <p class="ts-desc">Scan codebases, git history, and Docker images for accidentally exposed secrets. 60+ detection patterns, SARIF output for GitHub Advanced Security, and CI/CD pipeline mode.</p>
+      <div class="ts-chips">
+        <span class="chip" style="color:var(--el-c);border-color:rgba(255,41,82,.25)">v1.0.0</span>
+        <span class="chip">Python 3.10+</span><span class="chip">60+ Patterns</span><span class="chip">SARIF</span><span class="chip">MIT</span><span class="chip">PyPI</span>
+      </div>
+    </div>
   </div>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Module</th><th>Flag</th><th>Key Required</th><th>Since</th></tr></thead>
-      <tbody>
-        <tr><td>WHOIS</td><td><span class="ic">--whois</span></td><td>None</td><td>v4.0.0</td></tr>
-        <tr><td>Wayback Machine</td><td><span class="ic">--wayback</span></td><td>None</td><td>v4.0.0</td></tr>
-        <tr><td>SSL/TLS Analysis</td><td><span class="ic">--ssl</span></td><td>None</td><td>v4.0.0</td></tr>
-        <tr><td>VirusTotal</td><td><span class="ic">--vt --vt-key</span></td><td>Free tier</td><td>v4.0.0</td></tr>
-        <tr><td>Shodan</td><td><span class="ic">--shodan --shodan-key</span></td><td>Free tier</td><td>v4.0.0</td></tr>
-        <tr><td>NVD CVE Lookup</td><td><span class="ic">--cve --nvd-key</span></td><td>Optional</td><td>v3.3.0</td></tr>
-        <tr><td><span class="td-new">★ GitHub OSINT</span></td><td><span class="ic">--github-osint --github-token</span></td><td>Optional (raises limit)</td><td><span style="color:var(--g);font-family:'JetBrains Mono',monospace;font-size:0.72rem">v6.0.0</span></td></tr>
-        <tr><td><span class="td-new">★ JS Extraction</span></td><td><span class="ic">--js-extract</span></td><td>None</td><td><span style="color:var(--g);font-family:'JetBrains Mono',monospace;font-size:0.72rem">v6.0.0</span></td></tr>
-        <tr><td><span class="td-new">★ Cloud Buckets</span></td><td><span class="ic">--cloud-buckets</span></td><td>None</td><td><span style="color:var(--g);font-family:'JetBrains Mono',monospace;font-size:0.72rem">v6.0.0</span></td></tr>
-        <tr><td><span class="td-new">★ DNS Zone Transfer</span></td><td><span class="ic">--dns-zone</span></td><td>None</td><td><span style="color:var(--g);font-family:'JetBrains Mono',monospace;font-size:0.72rem">v6.0.0</span></td></tr>
-        <tr><td><span class="td-new">★ WAF Detection</span></td><td><span class="ic">--waf</span></td><td>None</td><td><span style="color:var(--g);font-family:'JetBrains Mono',monospace;font-size:0.72rem">v6.0.0</span></td></tr>
-        <tr><td><span class="td-new">★ CORS Scanner</span></td><td><span class="ic">--cors</span></td><td>None</td><td><span style="color:var(--g);font-family:'JetBrains Mono',monospace;font-size:0.72rem">v6.0.0</span></td></tr>
-      </tbody>
-    </table>
+  <div class="feat-grid">
+    <div class="feat"><span class="feat-icon">🔍</span><div class="feat-title">60+ Patterns</div><div class="feat-desc">AWS, GitHub, OpenAI, Anthropic, Stripe, Slack, Twilio, DB strings, private keys, JWT, and more.</div></div>
+    <div class="feat"><span class="feat-icon">📜</span><div class="feat-title">Git History</div><div class="feat-desc">Scans every past commit — catches secrets deleted from current files.</div></div>
+    <div class="feat"><span class="feat-icon">🐳</span><div class="feat-title">Docker Ready</div><div class="feat-desc">Works inside containers and CI/CD pipelines out of the box.</div></div>
+    <div class="feat"><span class="feat-icon">📊</span><div class="feat-title">SARIF Output</div><div class="feat-desc">GitHub Advanced Security compatible — results appear in the Security tab.</div></div>
+    <div class="feat"><span class="feat-icon">🚦</span><div class="feat-title">CI Mode</div><div class="feat-desc"><span class="ic">--ci</span> flag exits with code 1 on findings — blocks the pipeline automatically.</div></div>
+    <div class="feat"><span class="feat-icon">🎯</span><div class="feat-title">Severity Filter</div><div class="feat-desc">Focus on <span class="ic">critical,high</span> only and skip the noise.</div></div>
   </div>
 </section>
 
-<!-- 11 AI -->
-<section class="section" id="ai">
-  <div class="sec-eyebrow"><span class="sec-num">11</span><div class="sec-line"></div><span class="sec-tag">AI Analysis</span></div>
-  <h2>AI-Powered <span class="hl">Analysis</span></h2>
-  <p>Phase 11 feeds all scan results into an LLM for threat prioritisation and remediation. When no API key is present, a built-in rule-based analyser runs automatically (BUG-FIX v6).</p>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Provider</th><th>Flag</th><th>Default Model</th><th>Key</th></tr></thead>
-      <tbody>
-        <tr><td>Groq</td><td><span class="ic">--ai-provider groq</span></td><td>llama3-70b-8192</td><td>Required</td></tr>
-        <tr><td>Ollama</td><td><span class="ic">--ai-provider ollama</span></td><td>llama3</td><td>None (local)</td></tr>
-        <tr><td>Gemini</td><td><span class="ic">--ai-provider gemini</span></td><td>gemini-1.5-flash</td><td>Required</td></tr>
-        <tr><td>OpenAI</td><td><span class="ic">--ai-provider openai</span></td><td>gpt-4o-mini</td><td>Required</td></tr>
-        <tr><td style="color:var(--g2);font-family:'JetBrains Mono',monospace;font-size:0.75rem">Rule-based</td><td><span class="ic">--ai</span> (no key)</td><td>Built-in</td><td>None</td></tr>
-      </tbody>
-    </table>
-  </div>
+<section id="el-usage" class="tool-section t-el">
+  <h3 class="sh" style="--tc:var(--el-c)">Usage</h3>
   <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
-    <div class="term-body"><pre><code><span class="cmt"># With Groq (fast, free tier)</span>
-<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--ai --ai-key</span> YOUR_GROQ_KEY
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">bash</span></div>
+    <div class="term-body"><pre><code><span class="cmt"># Install</span>
+<span class="cmd">pip install</span> envleaks
 
-<span class="cmt"># With local Ollama (no key, completely free)</span>
-<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--ai --ai-provider</span> ollama
+<span class="cmt"># Scan current directory</span>
+<span class="cmd">envleaks scan</span> .
 
-<span class="cmt"># No key — rule-based analysis runs automatically (v6 fix)</span>
-<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com <span class="fl">--ai</span></code></pre></div>
+<span class="cmt"># Critical and high only</span>
+<span class="cmd">envleaks scan</span> . <span class="fl">--severity</span> critical,high
+
+<span class="cmt"># Also scan all past git commits</span>
+<span class="cmd">envleaks scan</span> . <span class="fl">--git-history</span>
+
+<span class="cmt"># Export JSON report</span>
+<span class="cmd">envleaks scan</span> . <span class="fl">--format</span> json <span class="fl">--output</span> report.json
+
+<span class="cmt"># CI mode — exits 1 if findings</span>
+<span class="cmd">envleaks scan</span> . <span class="fl">--ci --severity</span> critical,high
+
+<span class="cmt"># SARIF for GitHub Advanced Security</span>
+<span class="cmd">envleaks scan</span> . <span class="fl">--format</span> sarif <span class="fl">--output</span> envleaks.sarif
+
+<span class="cmt"># List all detection rules</span>
+<span class="cmd">envleaks list-rules</span>
+<span class="cmd">envleaks list-rules</span> <span class="fl">--severity</span> critical</code></pre></div>
   </div>
 </section>
 
-<!-- 12 DIFF -->
-<section class="section" id="diff">
-  <div class="sec-eyebrow"><span class="sec-num">12</span><div class="sec-line"></div><span class="sec-tag">Scan Diff · v6.0.0</span></div>
-  <h2>Scan <span class="hl">Diff</span></h2>
-  <p>Compare any two ReconNinja JSON reports. Track attack surface changes over time, catch new exposure, verify remediations.</p>
+<section id="el-rules" class="tool-section t-el">
+  <h3 class="sh">Detection Rules</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Category</th><th>Rules</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td>AWS</td><td>3</td><td>Access Key, Secret Key, Session Token</td></tr>
+      <tr><td>GitHub</td><td>5</td><td>Classic PAT, OAuth, Fine-Grained PAT, App tokens</td></tr>
+      <tr><td>Google / GCP</td><td>3</td><td>API Key, Service Account JSON</td></tr>
+      <tr><td>OpenAI</td><td>2</td><td>API Key, Organization ID</td></tr>
+      <tr><td>Anthropic</td><td>1</td><td>API Key</td></tr>
+      <tr><td>Stripe</td><td>4</td><td>Live/Test Secret, Webhook, Publishable</td></tr>
+      <tr><td>Slack</td><td>4</td><td>Bot Token, User Token, App Token, Webhook URL</td></tr>
+      <tr><td>Database URLs</td><td>2</td><td>PostgreSQL, MongoDB Atlas URI</td></tr>
+      <tr><td>Private Keys</td><td>5</td><td>RSA, EC, OpenSSH, PGP, PKCS#8</td></tr>
+      <tr><td>JWT</td><td>1</td><td>JSON Web Token</td></tr>
+      <tr><td>Discord / Telegram</td><td>3</td><td>Bot tokens, Webhook URLs</td></tr>
+      <tr><td>Firebase</td><td>2</td><td>Database URL, FCM Server Key</td></tr>
+      <tr><td>Generic</td><td>3</td><td>Secret assignments, Bearer tokens, Basic Auth in URLs</td></tr>
+      <tr><td>NPM</td><td>2</td><td>Registry auth token, Access token</td></tr>
+      <tr><td>+ more</td><td>20+</td><td>Twilio, SendGrid, Heroku, Azure, Cloudflare, DigitalOcean...</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="el-ci" class="tool-section t-el">
+  <h3 class="sh">CI/CD Integration</h3>
   <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
-    <div class="term-body"><pre><code><span class="cmt"># Run two scans then compare</span>
-<span class="cmd">ReconNinja</span> <span class="fl">--diff</span> \
-  reports/example.com_20260101_120000/report.json \
-  reports/example.com_20260320_120000/report.json</code></pre></div>
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">.github/workflows/secrets.yml</span></div>
+    <div class="term-body"><pre><code><span class="kw">- name:</span> Scan for secrets
+  <span class="kw">run:</span> |
+    pip install envleaks
+    envleaks scan . <span class="fl">--ci --severity</span> critical,high
+
+<span class="cmt"># Full SARIF → GitHub Security tab</span>
+<span class="kw">- name:</span> Scan (SARIF)
+  <span class="kw">run:</span> |
+    pip install envleaks
+    envleaks scan . <span class="fl">--format</span> sarif <span class="fl">--output</span> envleaks.sarif
+
+<span class="kw">- name:</span> Upload SARIF
+  <span class="kw">uses:</span> github/codeql-action/upload-sarif@v3
+  <span class="kw">with:</span>
+    <span class="kw">sarif_file:</span> envleaks.sarif</code></pre></div>
   </div>
-  <div class="diff-demo">
-    <div class="diff-header"><span>report diff</span> &nbsp;·&nbsp; example.com &nbsp;·&nbsp; 20260101 → 20260320</div>
-    <div class="diff-row"><div class="diff-type new">NEW PORT</div><div class="diff-val">10.0.0.5:8443 — https-alt (HIGH severity)</div></div>
-    <div class="diff-row"><div class="diff-type gone">CLOSED</div><div class="diff-val">10.0.0.5:23 — telnet (removed from exposure)</div></div>
-    <div class="diff-row"><div class="diff-type new">NEW SUB</div><div class="diff-val">staging.example.com</div></div>
-    <div class="diff-row"><div class="diff-type changed">VERSION</div><div class="diff-val">10.0.0.5:80 · Apache/2.4.41 → Apache/2.4.57</div></div>
-    <div class="diff-row"><div class="diff-type new">NEW VULN</div><div class="diff-val">[CRITICAL] CVE-2024-XXXX — Apache RCE @ 10.0.0.5:80</div></div>
-    <div class="diff-row"><div class="diff-type new">NEW TECH</div><div class="diff-val">React, Node.js (new stack detected)</div></div>
-  </div>
-  <p style="font-size:0.82rem;color:var(--text2)">Output covers: new/closed ports · changed service versions · new/gone subdomains · new/fixed vulnerabilities · new web services · new technologies detected.</p>
 </section>
 
-<!-- 13 NOTIFICATIONS -->
-<section class="section" id="notify">
-  <div class="sec-eyebrow"><span class="sec-num">13</span><div class="sec-line"></div><span class="sec-tag">Notifications · v6.0.0</span></div>
-  <h2>Mid-Scan <span class="hl">Alerts</span></h2>
-  <p>Fire webhook notifications the moment critical findings appear — don't wait for the scan to finish. Supports Slack, Discord, and any custom JSON endpoint.</p>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- ░░░  GITDORK  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+
+<section id="gd-overview" class="tool-section t-gd">
+  <div class="ts-header">
+    <div class="ts-icon">🎯</div>
+    <div class="ts-meta">
+      <div class="ts-eyebrow">// 04 · gitdork</div>
+      <div class="ts-title">GIT<span class="hl">DORK</span></div>
+      <p class="ts-desc">Google, Shodan, and GitHub dork generator. Feed it a domain or GitHub repo — get 100+ ready-to-use dork queries targeting exposed secrets, sensitive files, open directories, and misconfigs.</p>
+      <div class="ts-chips">
+        <span class="chip" style="color:var(--gd-c);border-color:rgba(0,207,255,.25)">v1.0.0</span>
+        <span class="chip">Python 3.10+</span><span class="chip">3 Engines</span><span class="chip">100+ Dorks</span><span class="chip">MIT</span><span class="chip">PyPI</span>
+      </div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat"><span class="feat-icon">🔍</span><div class="feat-title">Google Dorks</div><div class="feat-desc"><span class="ic">site:</span>, <span class="ic">filetype:</span>, <span class="ic">intitle:</span>, <span class="ic">inurl:</span> — 40+ templates across 8 categories.</div></div>
+    <div class="feat"><span class="feat-icon">🌐</span><div class="feat-title">Shodan Dorks</div><div class="feat-desc"><span class="ic">hostname:</span>, <span class="ic">port:</span>, <span class="ic">ssl:</span>, <span class="ic">product:</span> — 30+ infrastructure recon queries.</div></div>
+    <div class="feat"><span class="feat-icon">🐙</span><div class="feat-title">GitHub Search</div><div class="feat-desc"><span class="ic">org:</span>, <span class="ic">filename:</span>, <span class="ic">extension:</span> — 35+ code search dorks for secret hunting.</div></div>
+    <div class="feat"><span class="feat-icon">🧠</span><div class="feat-title">Tech Stack Detection</div><div class="feat-desc">Fetch GitHub metadata to generate tech-specific dorks (Django, AWS, Kubernetes, etc.).</div></div>
+    <div class="feat"><span class="feat-icon">🔗</span><div class="feat-title">Clickable URLs</div><div class="feat-desc">Every dork includes a direct search URL — click and run.</div></div>
+    <div class="feat"><span class="feat-icon">📝</span><div class="feat-title">Markdown Export</div><div class="feat-desc">Export full dork report to Markdown — perfect for bug bounty writeups.</div></div>
+  </div>
+</section>
+
+<section id="gd-usage" class="tool-section t-gd">
+  <h3 class="sh" style="--tc:var(--gd-c)">Usage</h3>
   <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
-    <div class="term-body"><pre><code><span class="cmt"># Slack</span>
-<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
-  <span class="fl">--notify</span> slack://hooks.slack.com/services/T.../B.../xxx <span class="fl">-y</span>
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">bash</span></div>
+    <div class="term-body"><pre><code><span class="cmt"># Install</span>
+<span class="cmd">pip install</span> gitdork
 
-<span class="cmt"># Discord</span>
-<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
-  <span class="fl">--notify</span> discord://discord.com/api/webhooks/xxx/yyy <span class="fl">-y</span>
+<span class="cmt"># Generate dorks for a domain</span>
+<span class="cmd">gitdork generate</span> example.com
 
-<span class="cmt"># Custom JSON webhook</span>
-<span class="cmd">ReconNinja</span> <span class="fl">-t</span> example.com \
-  <span class="fl">--notify</span> https://your-server.com/recon-alerts <span class="fl">-y</span></code></pre></div>
-  </div>
-  <p>Alerts fire for: high-risk ports found · critical vulnerabilities · public cloud buckets · critical CORS issues · GitHub secret exposure · zone transfer vulnerability · scan completion summary.</p>
-</section>
+<span class="cmt"># Generate for a GitHub org/repo</span>
+<span class="cmd">gitdork generate</span> ExploitCraft/ReconNinja
 
-<!-- 14 OUTPUT -->
-<section class="section" id="output">
-  <div class="sec-eyebrow"><span class="sec-num">14</span><div class="sec-line"></div><span class="sec-tag">Output</span></div>
-  <h2>Output & <span class="hl">Reports</span></h2>
-  <p>Every scan creates a timestamped folder. All formats are generated by default. v6 adds dedicated output directories for each new module.</p>
-  <div class="tree">
-<span class="dir">reports/</span>
-└── <span class="dir">example.com_20260320_120000/</span>
-    ├── <span class="file-g">report.html</span>         <span class="cmt">← dark-mode dashboard</span>
-    ├── <span class="file-g">report.json</span>         <span class="cmt">← full machine-readable results</span>
-    ├── <span class="file-g">report.md</span>           <span class="cmt">← markdown summary</span>
-    ├── scan_config.json    <span class="cmt">← exact config used</span>
-    ├── scan.log            <span class="cmt">← full execution log</span>
-    ├── state.json          <span class="cmt">← resume checkpoint</span>
-    ├── subdomains/
-    ├── nmap/
-    ├── nuclei/
-    ├── <span class="file-new">js_extract/</span>         <span class="cmt">← v6: downloaded JS files</span>
-    ├── <span class="file-new">cloud_buckets/</span>      <span class="cmt">← v6: bucket findings</span>
-    ├── <span class="file-new">dns_zone/</span>           <span class="cmt">← v6: leaked zone records</span>
-    ├── <span class="file-new">waf/</span>                <span class="cmt">← v6: WAF detection results</span>
-    └── <span class="file-new">cors/</span>               <span class="cmt">← v6: CORS findings</span>
+<span class="cmt"># Google dorks only</span>
+<span class="cmd">gitdork generate</span> example.com <span class="fl">--engine</span> google
+
+<span class="cmt"># Secrets and misconfigs only</span>
+<span class="cmd">gitdork generate</span> example.com <span class="fl">--category</span> secrets,misconfigs
+
+<span class="cmt"># Enrich with GitHub API for tech-stack dorks</span>
+<span class="cmd">gitdork generate</span> ExploitCraft/ReconNinja <span class="fl">--enrich</span>
+
+<span class="cmt"># Export to JSON</span>
+<span class="cmd">gitdork generate</span> example.com <span class="fl">--format</span> json <span class="fl">--output</span> dorks.json
+
+<span class="cmt"># Export to Markdown (for reports)</span>
+<span class="cmd">gitdork generate</span> example.com <span class="fl">--format</span> markdown <span class="fl">--output</span> dorks.md
+
+<span class="cmt"># Group output by category</span>
+<span class="cmd">gitdork generate</span> example.com <span class="fl">--group-by</span> category
+
+<span class="cmt"># List all categories / engines</span>
+<span class="cmd">gitdork list-categories</span>
+<span class="cmd">gitdork list-engines</span></code></pre></div>
   </div>
 </section>
 
-<!-- 15 RESUME -->
-<section class="section" id="resume">
-  <div class="sec-eyebrow"><span class="sec-num">15</span><div class="sec-line"></div><span class="sec-tag">Resume</span></div>
-  <h2>Resume <span class="hl">Scans</span></h2>
-  <p>Every completed phase writes a checkpoint to <span class="ic">state.json</span>. Resume with zero repeated work. In v6, RustScan port results are now correctly persisted and restored (BUG-FIX v6 #2).</p>
+<section id="gd-categories" class="tool-section t-gd">
+  <h3 class="sh">Dork Categories</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>ID</th><th>Description</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td>secrets</td><td>API keys, tokens, passwords, private keys</td><td><span class="ic">filetype:env "api_key"</span>, <span class="ic">BEGIN RSA PRIVATE KEY</span></td></tr>
+      <tr><td>sensitive_files</td><td>.env, .sql, .log, .bak, config files</td><td><span class="ic">filetype:sql</span>, <span class="ic">inurl:".git/config"</span></td></tr>
+      <tr><td>exposed_dirs</td><td>Open directory listings</td><td><span class="ic">intitle:"index of /"</span></td></tr>
+      <tr><td>misconfigs</td><td>phpMyAdmin, Jenkins, Grafana, debug mode</td><td><span class="ic">inurl:phpMyAdmin</span>, <span class="ic">port:2375</span></td></tr>
+      <tr><td>login_panels</td><td>Admin panels, login pages</td><td><span class="ic">inurl:admin</span>, <span class="ic">intitle:"login"</span></td></tr>
+      <tr><td>error_pages</td><td>Stack traces, PHP errors, SQL errors</td><td><span class="ic">"stack trace"</span>, <span class="ic">"SQL syntax"</span></td></tr>
+      <tr><td>subdomains</td><td>Subdomain enumeration, infra discovery</td><td><span class="ic">site:*.example.com</span></td></tr>
+      <tr><td>code_leaks</td><td>TODO credentials, internal-only code</td><td><span class="ic">"do not commit"</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="gd-engines" class="tool-section t-gd">
+  <h3 class="sh">Engines</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Engine</th><th>Operators</th><th>Best For</th></tr></thead>
+    <tbody>
+      <tr><td>google</td><td><span class="ic">site:</span> <span class="ic">filetype:</span> <span class="ic">intitle:</span> <span class="ic">inurl:</span></td><td>Exposed files, admin panels, error pages</td></tr>
+      <tr><td>shodan</td><td><span class="ic">hostname:</span> <span class="ic">port:</span> <span class="ic">ssl:</span> <span class="ic">product:</span></td><td>Open ports, exposed services, infra recon</td></tr>
+      <tr><td>github</td><td><span class="ic">org:</span> <span class="ic">filename:</span> <span class="ic">extension:</span></td><td>Hardcoded secrets, leaked credentials in repos</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- ░░░  WIFI-PASSVIEW  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+
+<section id="wp-overview" class="tool-section t-wp">
+  <div class="ts-header">
+    <div class="ts-icon">📡</div>
+    <div class="ts-meta">
+      <div class="ts-eyebrow">// 05 · wifi-passview</div>
+      <div class="ts-title">WIFI<span class="hl">-PASSVIEW</span></div>
+      <p class="ts-desc">Cross-platform CLI to dump all saved WiFi credentials in one command. Linux, Windows, and macOS. Terminal, JSON, and CSV output with redact mode for safe screenshots.</p>
+      <div class="ts-chips">
+        <span class="chip" style="color:var(--wp-c);border-color:rgba(255,179,71,.25)">v1.0.0</span>
+        <span class="chip">Python 3.10+</span><span class="chip">Linux</span><span class="chip">Windows</span><span class="chip">macOS</span><span class="chip">MIT</span><span class="chip">PyPI</span>
+      </div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat"><span class="feat-icon">🐧</span><div class="feat-title">Linux</div><div class="feat-desc">NetworkManager, wpa_supplicant, iwd. Full passwords with sudo.</div></div>
+    <div class="feat"><span class="feat-icon">🪟</span><div class="feat-title">Windows</div><div class="feat-desc"><span class="ic">netsh wlan</span> extraction. No admin required for current user profiles.</div></div>
+    <div class="feat"><span class="feat-icon">🍎</span><div class="feat-title">macOS</div><div class="feat-desc">Keychain via <span class="ic">security find-generic-password</span>.</div></div>
+    <div class="feat"><span class="feat-icon">🔒</span><div class="feat-title">Redact Mode</div><div class="feat-desc"><span class="ic">--redact</span> partially masks passwords — safe for screenshots and sharing.</div></div>
+    <div class="feat"><span class="feat-icon">🔍</span><div class="feat-title">Search</div><div class="feat-desc">Filter profiles by SSID with <span class="ic">wifi-passview search "HomeNet"</span>.</div></div>
+    <div class="feat"><span class="feat-icon">📊</span><div class="feat-title">CSV / JSON</div><div class="feat-desc">Machine-readable output for integration into other tools.</div></div>
+  </div>
+  <div class="warn"><span class="warn-icon">⚠</span><span>Use only on devices you own or have explicit permission to audit.</span></div>
+</section>
+
+<section id="wp-usage" class="tool-section t-wp">
+  <h3 class="sh" style="--tc:var(--wp-c)">Usage</h3>
   <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
-    <div class="term-body"><pre><code><span class="cmt"># Scan crashed after Phase 9 — resume from checkpoint</span>
-<span class="cmd">ReconNinja</span> <span class="fl">--resume</span> reports/example.com_20260320_120000/state.json</code></pre></div>
-  </div>
-  <p>All results — including v5 intelligence (WHOIS, Wayback, SSL, VT, Shodan) and v6 new module data (GitHub, JS, buckets, zone transfer, WAF, CORS) — are serialised into <span class="ic">state.json</span> and fully restored on resume.</p>
-</section>
+    <div class="term-bar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="term-name">bash</span></div>
+    <div class="term-body"><pre><code><span class="cmt"># Install</span>
+<span class="cmd">pip install</span> wifi-passview
 
-<!-- 16 PLUGINS -->
-<section class="section" id="plugins">
-  <div class="sec-eyebrow"><span class="sec-num">16</span><div class="sec-line"></div><span class="sec-tag">Plugins</span></div>
-  <h2>Plugin <span class="hl">System</span></h2>
-  <p>Drop any <span class="ic">.py</span> file into <span class="ic">plugins/</span>. Plugins receive the full <span class="ic">ReconResult</span> and <span class="ic">ScanConfig</span> after all phases complete, with access to all v6 new result fields.</p>
-  <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">plugins/my_plugin.py</span></div>
-    <div class="term-body"><pre><code>PLUGIN_NAME    = <span class="str">"my_plugin"</span>
-PLUGIN_VERSION = <span class="str">"1.0"</span>
+<span class="cmt"># Dump all saved WiFi profiles</span>
+<span class="cmd">wifi-passview dump</span>
 
-<span class="kw">def</span> run(target, out_folder, result, cfg):
-    <span class="cmt"># v5 intelligence</span>
-    print(f<span class="str">"Shodan hits:   {len(result.shodan_results)}"</span>)
-    <span class="cmt"># v6 new results</span>
-    print(f<span class="str">"GitHub hits:   {sum(r.get('total_findings',0) for r in result.github_findings)}"</span>)
-    print(f<span class="str">"Public buckets:{sum(1 for b in result.bucket_findings if b.get('status')=='public')}"</span>)
-    print(f<span class="str">"CORS findings: {len(result.cors_findings)}"</span>)
-    <span class="cmt"># write custom reports, post to Slack, etc.</span></code></pre></div>
-  </div>
-</section>
+<span class="cmt"># Redact passwords (safe for screenshots)</span>
+<span class="cmd">wifi-passview dump</span> <span class="fl">--redact</span>
 
-<!-- 17 DEVELOPMENT -->
-<section class="section" id="development">
-  <div class="sec-eyebrow"><span class="sec-num">17</span><div class="sec-line"></div><span class="sec-tag">Development</span></div>
-  <h2>Dev <span class="hl">Setup</span></h2>
-  <div class="terminal">
-    <div class="term-bar"><div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div><span class="term-name">bash</span></div>
-    <div class="term-body"><pre><code><span class="cmd">git clone</span> https://github.com/ExploitCraft/ReconNinja.git
-<span class="cmd">cd</span> ReconNinja
-<span class="cmd">pip install -e</span> <span class="str">".[full]"</span>
+<span class="cmt"># Hide passwords entirely</span>
+<span class="cmd">wifi-passview dump</span> <span class="fl">--no-password</span>
 
-<span class="cmt"># Run all 598 tests</span>
-<span class="cmd">pytest</span> tests/ <span class="fl">-v</span>
+<span class="cmt"># Export to JSON</span>
+<span class="cmd">wifi-passview dump</span> <span class="fl">--format</span> json <span class="fl">--output</span> wifi.json
 
-<span class="cmt"># Specific suites</span>
-<span class="cmd">pytest</span> tests/test_orchestrator.py <span class="fl">-v</span>   <span class="cmt"># pipeline + all bug fix regressions</span>
-<span class="cmd">pytest</span> tests/test_v4_modules.py <span class="fl">-v</span>    <span class="cmt"># intelligence module tests</span>
-<span class="cmd">pytest</span> tests/test_models.py <span class="fl">-v</span>        <span class="cmt"># data model tests</span>
-<span class="cmd">pytest</span> tests/test_resume.py <span class="fl">-v</span>        <span class="cmt"># resume/state serialization</span></code></pre></div>
+<span class="cmt"># Export to CSV</span>
+<span class="cmd">wifi-passview dump</span> <span class="fl">--format</span> csv <span class="fl">--output</span> wifi.csv
+
+<span class="cmt"># Search for a specific network</span>
+<span class="cmd">wifi-passview search</span> <span class="str">"HomeNetwork"</span>
+
+<span class="cmt"># Linux — run with sudo for full passwords from NetworkManager</span>
+<span class="cmd">sudo wifi-passview dump</span></code></pre></div>
   </div>
 </section>
 
-<hr class="divider">
+<section id="wp-platform" class="tool-section t-wp">
+  <h3 class="sh">Platform Notes</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Platform</th><th>Method</th><th>Requires</th></tr></thead>
+    <tbody>
+      <tr><td>Linux</td><td>NetworkManager <span class="ic">/etc/NetworkManager/system-connections/</span></td><td>sudo for passwords</td></tr>
+      <tr><td>Linux</td><td>wpa_supplicant <span class="ic">/etc/wpa_supplicant/wpa_supplicant.conf</span></td><td>sudo</td></tr>
+      <tr><td>Linux</td><td>iwd <span class="ic">/var/lib/iwd/*.psk</span></td><td>sudo</td></tr>
+      <tr><td>Linux</td><td><span class="ic">nmcli</span> fallback — SSID list only</td><td>No root</td></tr>
+      <tr><td>Windows</td><td><span class="ic">netsh wlan show profiles</span> + <span class="ic">key=clear</span></td><td>No admin</td></tr>
+      <tr><td>macOS</td><td><span class="ic">security find-generic-password</span> (Keychain)</td><td>Keychain permission</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- ░░░  FOOTER  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
 
 <footer class="footer">
-  <span>ReconNinja v6.0.0 &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; ExploitCraft · Bangladesh 🇧🇩</span>
+  <span>HackerInc · ExploitCraft · MIT License · Bangladesh 🇧🇩</span>
   <div class="footer-links">
-    <a href="https://github.com/ExploitCraft/ReconNinja">GitHub</a>
-    <a href="https://github.com/ExploitCraft/ReconNinja/issues">Issues</a>
-    <a href="https://pypi.org/user/ExploitCraft/">PyPI</a>
-    <a href="http://doc.emonpersonal.xyz/">Docs</a>
+    <a href="https://github.com/ExploitCraft">GitHub</a>
+    <a href="https://github.com/ExploitCraft/ReconNinja">ReconNinja</a>
+    <a href="https://github.com/ExploitCraft/VaultHound">VaultHound</a>
+    <a href="https://github.com/ExploitCraft/envleaks">envleaks</a>
+    <a href="https://github.com/ExploitCraft/gitdork">gitdork</a>
+    <a href="https://github.com/ExploitCraft/wifi-passview">wifi-passview</a>
   </div>
 </footer>
 
@@ -952,14 +929,17 @@ PLUGIN_VERSION = <span class="str">"1.0"</span>
 </div>
 
 <script>
+// Section reveal on scroll
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
-}, { threshold: 0.05 });
-document.querySelectorAll('.section').forEach(s => obs.observe(s));
+}, { threshold: 0.04 });
+document.querySelectorAll('.tool-section').forEach(s => obs.observe(s));
 
-const sections = document.querySelectorAll('.section, #overview');
-const links    = document.querySelectorAll('.sb-link');
-const navObs   = new IntersectionObserver(entries => {
+// Active sidebar link tracking
+const sections = document.querySelectorAll('.tool-section, #home');
+const links = document.querySelectorAll('.sb-link');
+
+const navObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if(e.isIntersecting){
       links.forEach(l => l.classList.remove('active'));
@@ -967,7 +947,8 @@ const navObs   = new IntersectionObserver(entries => {
       if(a) a.classList.add('active');
     }
   });
-}, { threshold: 0.35 });
+}, { threshold: 0.3 });
+
 sections.forEach(s => navObs.observe(s));
 </script>
 </body>
